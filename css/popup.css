@@ -1,414 +1,317 @@
- body{
+:root {
+    --bg-primary: #111111;
+    --bg-secondary: #343436;
+    --text-primary: #fdfefe;
+    --text-secondary: #b0b0b0;
+    --accent-color: #575a61;
+    --hover-color: #3d7eae;
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+body {
     margin: 0 auto;
-    height: auto;
-    width: auto;
-    font-family: "Segoe UI",  Tahoma, sans-serif;
-
-}
-ul{
-	padding:0;
-	margin: 0 auto
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
 }
 
-li{
-	display: inline-block;
-	list-style:none;
-
-}
-a{
-	text-decoration:none;
-	cursor: pointer;
-}
-li	a{
-	border-radius: 5px;
-	text-align: center;
-	line-height: 16px;
-	font-size: 16px;
-	background:transparent url("../image/blanco.png") repeat ;
-	color:#00f;
-}
-
-li	a:hover{
-	background: #fff ;
-	color:#075E86;
-
-}
-figure {
-	background:transparent url("../image/blanco.png") repeat ;
-	color:#00f;
-	border-radius: 5px;
-}
-figure:hover {
-	background: #fff ;
-	color:#075E86;
-}
-.checkboxtext
-{
-  margin:0 5px 0 100px;
-  font-size: 110%;
-  display: inline;
-  padding-bottom: 10px;
-  height: 100px;
-  line-height: 100%;
-
-}
-/******************************
-*   Classic div styles
-******************************/
-#classic{
-   width: 250px;
-}
-#classic li	a{
-	display: block;
-	float: left;
-	margin: 0 30px 20px 0;
-	width: 85px;
-	height: 83px;
-
-}
-#classic li a img{
-	width: 70px;
-	padding: 0;
-}
-
-#classic #loading p{
-	width:250px;
-	color:#075E86;
-	text-align: center;
-	font-size: 16px;
-}
-#classic #on{
-	background:transparent url("../image/popup_back.jpg") ;
-	width: 250px;
-	height: 383px;
-	margin: 0;
-}
-#classic #off{
-	background:transparent url("../image/popup_back.jpg") ;
-	width: 250px;
-	height: 100px;
-	margin: 0;
-}
-
-#classic #disable {
-	position:absolute;
-	top:70px;
-	left:30px;
-	width:200px;
-	border-radius: 5px;
-	background:transparent url("../image/blanco.png") repeat ;
-	color:#00f;
-	text-align: center;
-	font-size: 16px;
-
-}
-#classic #disable:hover {
-background: #fff;
-color:#075E86;
-}
-#classic #enable {
-	position:absolute;
-	top:60px;
-	left:30px;
-	width:200px;
-	text-align: center;
-	font-size: 25px;
-	color: #fff;
-}
-
-#classic #settings {
-	position:absolute;
-	top:340px;
-	left:30px;
-	width:200px;
-	color: #fff;
-	text-align: center;
-	font-size: 20px;
-
-}
-#classic #buttons {
-	position:absolute;
-	top:96px;
-	left:2px;
-	width:250px;
-	margin-left: 10px;
-}
-
-#classic #firma{
-	color: #fff;
-	text-align: center;
-}
-/******************************
-*   styleWithHW div styles
-******************************/
-
-#styleWithHW{
-	width: 400px;
-
-}
-#styleWithHW a{
-	color:#00f;
-
-}
- #styleWithHW #sliderMenu
- {
-	 background:url("../image/options_img/option_Background.png") repeat-x;
-	 overflow: hidden;
-	 margin: 0 auto;
-	 text-align: center;
- }
-
-#styleWithHW #buttons
-{
-
-	height: 80px;
-	text-align: center;
-
-}
-#styleWithHW .menu
-{
-	display: inline-block;
-	width: 80px;
-	height: 80px;
-	overflow: hidden;
-
-}
-#styleWithHW figure
-{
-	min-height: 50px;
-	width:60px;
-	padding: 0;
-	margin: 0 auto;
-	margin-top: 10px;
-}
-#styleWithHW .img
-{
-	display: inline-block;
-	height: 25px;
-}
-
-#styleWithHW figure img
-{
-
-	width:40px;
-}
-
-
- #styleWithHW #Content
- {
-     height: 400px;
-     max-height: 400px;
-     background: #095E87;
-     overflow: auto;
- }
-
- /*#styleWithHW .slider*/
- /*{*/
-
-	 /*color: white;*/
-	 /*font-size: 40px;*/
-	 /*!*position: absolute;*!*/
-	 /*margin-left: 0;*/
-	 /*padding: 0;*/
-	 /*margin-top:20px; ;*/
- /*}*/
- #sliderRight{
-	 float: right;
-	width: 10px;
-	 font-size: 20px;
-	 color:white;
-
-
- }
-
- #sliderLeft{
-	 float: right;
-	 margin-left: -10px;
-	 padding-left: -10px;
- }
-/************************************
-*   styleWithHW -> Homeworks styles
-************************************/
-#styleWithHW #Homeworks
-{
-	height: 400px;
-	max-height: 400px;
-	overflow: auto;
-}
-#styleWithHW #Homeworks .event,.options
-{
-	background:transparent url("../image/blanco.png") repeat ;
-	color:#00f;
-	border-radius: 10px;
-	display: block;
-	margin: 10px 15px;
-	height: 65px;
-	line-height: 100%;
-	padding: 0 15px;
-	font-size: 14px;
-}
-#styleWithHW #Homeworks .event.event-test{
-	background-color: #ff7c00;
-}
-#styleWithHW #Homeworks .event:hover,.options:hover,.usefulSite:hover {
-	background: #fff ;
-	color:#075E86;
-}
-
-#styleWithHW #Homeworks .event input[type="checkbox"]
-{
-    display: block;
-    height: 100%;
-    float: right;
-	-webkit-transform: scale(1.5);
-
-}
-#styleWithHW #Homeworks .eventDetails
-{
-	display: block;
-	float: right;
-    width: 250px;
-    height: 100%;
-    margin: 0 20px;
-}
-
-#styleWithHW #Homeworks .eventDetails p{
-    /*display: inline-block;*/
-    margin: 4px 0;
+ul {
     padding: 0;
-}
-#styleWithHW #Homeworks .event img
-{
-    width: 20px;
-    display: block;
-    float: right;
-//    margin: 18 auto;
-
-}
-#styleWithHW #Homeworks  .total
-{
-	margin-top: 2px;
-	margin-bottom: 5px;
-	text-align: center;
-	color: #fff;
-}
- #styleWithHW #Homeworks  .notifi
- {
-	 margin-top: 20px;
-
- }
-
- /******************************
- *   Homeworks div scr
- ******************************/
-
-
- #styleWithHW #Content::-webkit-scrollbar, #styleWithHW #Homeworks::-webkit-scrollbar
- {
-	 width: 6px;
-	 background-color: #095E87;
- }
-
- #styleWithHW #Content::-webkit-scrollbar-thumb, #styleWithHW #Homeworks::-webkit-scrollbar-thumb
- {
-	 border-radius: 10px;
-	 -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,.3);
-	 background-color: #ddd;
- }
-
- /************************************
- *   styleWithHW -> wifiConnect styles
- ************************************/
-
-#wificonnect{
-    /*height: 400px;*/
-    /*max-height: 400px;*/
     margin: 0 auto;
-    text-align: center;
-    margin-top:50px ;
 }
-#wifimsg{
-    color: #ffffff;
+
+li {
+    display: inline-block;
+    list-style: none;
+}
+
+a {
+    text-decoration: none;
+    cursor: pointer;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+li a {
+    display: inline-block;
+    padding: 10px 15px;
+    border-radius: var(--border-radius);
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+}
+
+li a:hover,
+figure:hover {
+    background-color: var(--accent-color);
+    color: var(--text-primary);
+}
+
+figure {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    padding: 15px;
+    transition: var(--transition);
+}
+
+.checkboxtext {
+    margin: 0 5px 0 100px;
+    font-size: 110%;
+    display: inline;
+    padding-bottom: 10px;
+    line-height: 1.5;
+}
+
+/* Classic div styles */
+#classic {
+    width: 300px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 20px;
+}
+
+#classic li a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 15px 20px 0;
+    width: 100px;
+    height: 100px;
+    justify-content: center;
+}
+
+#classic li a img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+#classic #loading p {
+    color: var(--text-secondary);
+    text-align: center;
     font-size: 16px;
+}
+
+#classic #on,
+#classic #off {
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    padding: 20px;
+}
+
+#classic #disable,
+#classic #enable,
+#classic #settings {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-radius: var(--border-radius);
+    padding: 10px;
+    text-align: center;
+    font-size: 16px;
+    transition: var(--transition);
+}
+
+#classic #disable:hover,
+#classic #enable:hover,
+#classic #settings:hover {
+    background-color: var(--hover-color);
+}
+
+/* styleWithHW div styles */
+#styleWithHW {
+    width: 400px;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    overflow: hidden;
+}
+
+#styleWithHW #sliderMenu {
+    background-color: var(--bg-primary);
+    overflow: hidden;
+    padding: 10px 0;
+}
+
+#styleWithHW #buttons {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    height: 30px;
+}
+
+#styleWithHW .menu {
+    width: 20px;
+    height: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+#styleWithHW figure {
+    margin: 0;
+    padding: 0px;
+}
+
+#styleWithHW figure img {
+    width: 80px;
+    height: 30px;
+    object-fit: contain;
+}
+
+#styleWithHW #Content {
+    height: 400px;
+    max-height: 400px;
+    background-color: var(--bg-primary);
+    overflow: auto;
+    padding: 20px;
+}
+
+/* Homeworks styles */
+#styleWithHW #Homeworks .event,
+.options {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-radius: var(--border-radius);
+    padding: 10px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#styleWithHW #Homeworks .event.event-test {
+    background-color: #8c4600;
+}
+
+#styleWithHW #Homeworks .event:hover,
+.options:hover,
+.usefulSite:hover {
+    background-color: var(--hover-color);
+}
+
+#styleWithHW #Homeworks .event input[type="checkbox"] {
+    transform: scale(1.5);
+    margin-left: 15px;
+}
+
+#styleWithHW #Homeworks .eventDetails {
+    flex-grow: 1;
+    margin-left: 15px;
+}
+
+#styleWithHW #Homeworks .event img {
+    width: 24px;
+    height: 24px;
+    object-fit: contain;
+}
+
+/* Scrollbar styles */
+#styleWithHW #Content::-webkit-scrollbar,
+#styleWithHW #Homeworks::-webkit-scrollbar {
+    width: 8px;
+    background-color: var(--bg-primary);
+}
+
+#styleWithHW #Content::-webkit-scrollbar-thumb,
+#styleWithHW #Homeworks::-webkit-scrollbar-thumb {
+    border-radius: 10px;
+    background-color: var(--accent-color);
+}
+
+/* WiFi Connect styles */
+#wificonnect {
+    text-align: center;
+    padding: 50px 0;
+}
+
+#wifimsg {
+    color: var(--text-secondary);
+    font-size: 18px;
     margin-top: 30px;
 }
-.wifiIcon
-{
-    height: 100px;
-}
-.options{
-    height: auto;
-    padding: 5px;
-}
-.main{
-	text-align: center;
-	font-size: 26px;
+
+.wifiIcon {
+    height: 120px;
+    width: 120px;
+    object-fit: contain;
 }
 
-.navigator{
-	font-size: 16px;
-	padding: 10px 15px;
-	text-align: justify;
+.options {
+    padding: 15px;
 }
 
- .usefulSite{
-	 background:transparent url("../image/blanco.png") repeat ;
-	 color:#00f;
-	 border-radius: 10px;
-	 display: block;
-	 margin: 10px 15px;
-	 line-height: 100%;
-	 padding: 0 15px;
-	 font-size: 14px;
-	 height: 50px;
-	 overflow: hidden;
-
- }
- .usefulSite .usLogo{
-	 display: block;
-	 margin-top: 5px;
-	 margin-left: 10px;
-	 float: right;
-	 width: 50px;
- }
- .usefulSite .usLogo img{
-	height: 40px;
-}
- .usefulSite .usName{
-	 display: block;
-	 float: right;
-	 line-height: 40px;
- }
-/************************************
-*   styleWithHW -> foot styles
-************************************/
-#styleWithHW #foot
-{
-	height: auto;
-	background:url("../image/options_img/option_Background.png") repeat-x;
-	text-align: center;
-	overflow: hidden;
-}
-#styleWithHW #foot a
-{
-	display: inline-block;
-	/*height: 90%;*/
-	/*text-align:center;*/
-	color: #fff;
-	font-size: 28px;
-	width: 45%;
-	/*width: 30%;*/
-}
- #styleWithHW #foot a:hover
- {
-	background-color: white;
-	color: black;
- }
-#styleWithHW #foot p
-{
-	color: #fff;
+.main {
+    font-size: 28px;
+    margin-bottom: 20px;
 }
 
-.form-control{
- display: inline;
+.navigator {
+    font-size: 16px;
+    padding: 15px;
+    text-align: justify;
+    background-color: var(--bg-secondary);
+    border-radius: var(--border-radius);
+    margin-bottom: 15px;
+}
+
+.usefulSite {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border-radius: var(--border-radius);
+    padding: 10px 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: var(--transition);
+}
+
+.usefulSite .usLogo img {
+    height: 20px;
+    width: 20px;
+    padding: 0px 0px 0px 10px;
+    object-fit: contain;
+}
+
+.usefulSite .usName {
+    flex-grow: 1;
+    margin-left: 15px;
+}
+
+/* Footer styles */
+#styleWithHW #foot {
+    background-color: var(--bg-secondary);
+    padding: 10px;
+    text-align: center;
+}
+
+#styleWithHW #foot a {
+    display: inline-block;
+    color: var(--text-primary);
+    font-size: 12px;
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: var(--border-radius);
+    transition: var(--transition);
+}
+
+#styleWithHW #foot a:hover {
+    background-color: var(--hover-color);
+}
+
+.form-control {
+    display: inline-block;
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+    border: 1px solid var(--accent-color);
+    border-radius: var(--border-radius);
+    padding: 8px 12px;
+    font-size: 14px;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--hover-color);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.3);
 }

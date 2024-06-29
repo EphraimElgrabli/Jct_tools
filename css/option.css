@@ -1,318 +1,312 @@
-body
-{
-  background:#0d3d3d ;
-  margin:0 auto;
-  width:1024px;
-  height: auto;
-  overflow: visible;
-  min-height: 100%;
-  font-style: David;
-  color: #fff;
-  font-size: 28px;
-}
-#contenedor h2
-{
-  font-size: 28px;
-  display: block;
-  margin: 0 0 50px 0;
-}
-#contenedor input[type=checkbox] , input[type=radio]
-{
-  /* Double-sized Checkboxes */
-  -ms-transform: scale(2); /* IE */
-  -moz-transform: scale(2); /* FF */
-  -webkit-transform: scale(2); /* Safari and Chrome */
-  -o-transform: scale(2); /* Opera */
-  padding: 10px;
-  margin: 0 auto;
+:root {
+    --bg-primary: #1a1a1a;
+    --bg-secondary: #2c2c2c;
+    --text-primary: #e0e0e0;
+    --text-secondary: #b0b0b0;
+    --accent-color: #4a90e2;
+    --hover-color: #3a7bc8;
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
 }
 
-span{
-  display: block;
-  margin: 20px auto;
-  text-align:center;
-}
-a{
-   text-decoration:none;
-   color:#fff;
-}
-figure{
-  display: inline-block;
+body {
+    background: var(--bg-primary);
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+    min-height: 100vh;
+    font-family: "Segoe UI", Tahoma, sans-serif;
+    color: var(--text-primary);
+    font-size: 16px;
+    line-height: 1.6;
 }
 
-/******************************
-*   Global classes
-******************************/
+#contenedor h2 {
+    font-size: 24px;
+    margin: 0 0 30px 0;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+    transform: scale(1.5);
+    margin: 0 10px;
+}
+
+span {
+    display: block;
+    margin: 15px auto;
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: var(--accent-color);
+    transition: var(--transition);
+}
+
+a:hover {
+    color: var(--hover-color);
+}
+
+figure {
+    display: inline-block;
+}
+
+/* Global classes */
 .hidden {
     display: none;
 }
-.checkboxtext
-{
-  margin:0 5px 0 100px;
-  font-size: 110%;
-  display: inline;
-  padding-bottom: 10px;
-  height: 100px;
-  line-height: 100%;
 
+.checkboxtext {
+    margin: 0 5px 0 20px;
+    font-size: 110%;
+    display: inline;
+    line-height: 1.5;
 }
-.lastcheckboxtext
-{
-  margin:0 5px 0 0;
 
+.lastcheckboxtext {
+    margin: 0 5px 0 0;
 }
-.labelsDown
-{
-  margin: 0;
-  margin-bottom: 10px;
+
+.labelsDown {
+    margin: 0 0 10px 0;
 }
-.inlines
-{
+
+.inlines {
     display: inline-block;
-    width: 450px;
+    width: 100%;
+    max-width: 450px;
 }
 
-
-/******************************
-*   Menu div styles
-******************************/
-#menu
-{
-  background:url("../image/options_img/option_Background.png") repeat-x;
-  height:100px;
-  text-align:center;
-  margin-top: 20px;
-  line-height: 100%;
-  border: 1px #fff solid;
-  border-style: outset;
-  border-width:5px;
-  border-bottom: 0;
-  width:100%;
-}
-#menu a
-{
-
-  margin:5px 0 0 80px;
-  vertical-align: center;
-
-  display: inline-block;
-  padding:10px 10px 2px 10px;
-  text-decoration: none;
-}
-#menu .lastoption
-{
-  margin-left: 0;
+/* Menu styles */
+#menu {
+    background: var(--bg-secondary);
+    padding: 20px 0;
+    text-align: center;
+    margin-top: 20px;
+    border-radius: var(--border-radius) var(--border-radius) 0 0;
 }
 
-#menu .option:hover
-{
-  background: #000;
-  -webkit-filter: invert(1);
-}
-#menu .option img
-{
-  width: 50px;
-  height: 50px;
-  padding: 0;
-  margin: 0;
-}
-#menu .option .text
-{
- margin: 0;
+#menu a {
+    margin: 0 20px;
+    display: inline-block;
+    padding: 10px;
+    text-decoration: none;
+    transition: var(--transition);
 }
 
-
-/******************************
-*   Conteiner div styles
-******************************/
-#contenedor
-{
-  padding-top: 50px;
-  height:auto;
-  width:100%;
-  text-align:center;
-  margin:0 auto;
-  border: 1px #fff solid;
-  border-style: outset;
-  border-width:5px;
-  border-top: 0;
-  background: #095E87;
-  overflow: visible;
-}
-#contenedor div
-{
-  padding: 15px;
-}
-/******************************
-*   account div styles
-******************************/
-#account
-{
-  overflow: visible;
-}
-#account input
-{
-  height: 50px;
-  width: 250px;
-  margin-bottom: 10px;
-  font-size: 22px;
-
-
-}
-#account input[type=checkbox]
-{
-  height: auto;
-  width: auto;
-  -webkit-transform: scale(2); /* Safari and Chrome */
-}
-#account label{
-  display: inline-block;
-  width: 200px;
-  padding: 5px;
-
-
+#menu .option:hover {
+    background: var(--hover-color);
 }
 
-#account .activeWeb
-{
-  margin:50px 0;
-}
-#account button{
-  margin: 0 10px;
-  height: 60px;
-  font-size: 30px;
-  height: auto;
-  padding: 5px;
-}
-#account .buttons{
-  text-align: right;
-  overflow: hidden;
+#menu .option img {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    margin: 0 0 5px 0;
 }
 
-/******************************
-*   courses div styles
-******************************/
-
-#courses
-{
-  overflow: visible;
-}
-#courses table
-{
-  width: 100%;
-  margin: 0 auto;
-  border: 1px solid #000;
-  background: #fff;
-  color: #000;
-  text-align: center;
-  border-collapse: collapse;
-  font-style: David;
-  font-size: 28px;
-}
-#courses table th,td
-{
-  padding: 0;
-  margin:0;
-  border: 1px solid #000;
-  height: 40px;
-}
-#courses .refresh
-{
-  float: right;
-  font-size: 21px;
-  margin-right:2px;
-}
-#courses .btn
-{
-  float: right;
-
-}
-/******************************
-*   notifications div styles
-******************************/
-
-#notifications input[type=number]
-{
-  height: auto;
-  width: 80px;
-  font-size: 18px;
-}
-#notifications button
-{
-  font-size: 26px;
-}
-/******************************
-*   advanced div styles
-******************************/
-#advanced .helper
-{
-  text-align: right;
-  margin: 0 50px 10px 0;
-}
-#advanced .option
-{
-  text-align: right;
-  margin: 20px 50px 10px 0
-}
-#advanced .option.disabled{
-  color: #ccc;
-}
-#advanced figure img{
-  width: 250px;
-  height: 380px;
-  border: #fff solid 0.2px;
-}
-#advanced button{
-  font-size: 30px;
+#menu .option .text {
+    margin: 0;
+    font-size: 14px;
 }
 
-#about
-{
-  text-align: right;
-}
-#about .log
-{
-  margin:25px 50px 0 0;
-}
-
-#advanced .buttons
-{
-  display: block;
-  width: 100%;
-  clear: both;
-  overflow: hidden;
-  text-align: center;
+/* Container styles */
+#contenedor {
+    padding: 30px;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+    background: var(--bg-secondary);
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
 }
 
-/*OVERIDE BOOTSTRAT*/
-
-.panel{
-  background-color: transparent;
+#contenedor div {
+    padding: 15px;
 }
 
-#passiveMode
-{
-  text-align: right;
-  margin-right: 50px;
+/* Account styles */
+#account input {
+    height: 40px;
+    width: 250px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--accent-color);
+    border-radius: var(--border-radius);
+    padding: 0 10px;
 }
 
-th{
-  text-align: center;
+#account label {
+    display: inline-block;
+    width: 200px;
+    padding: 5px;
 }
 
+#account .activeWeb {
+    margin: 30px 0;
+}
+
+#account button {
+    margin: 0 10px;
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: var(--accent-color);
+    color: var(--text-primary);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#account button:hover {
+    background-color: var(--hover-color);
+}
+
+#account .buttons {
+    text-align: right;
+}
+
+/* Courses styles */
+#courses table {
+    width: 100%;
+    margin: 0 auto;
+    border: 1px solid var(--accent-color);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    text-align: center;
+    border-collapse: collapse;
+    font-size: 16px;
+}
+
+#courses table th,
+td {
+    padding: 10px;
+    border: 1px solid var(--accent-color);
+}
+
+#courses .refresh {
+    float: right;
+    font-size: 14px;
+    margin-right: 10px;
+}
+
+#courses .btn {
+    float: right;
+}
+
+/* Notifications styles */
+#notifications input[type="number"] {
+    height: 30px;
+    width: 80px;
+    font-size: 16px;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    border: 1px solid var(--accent-color);
+    border-radius: var(--border-radius);
+    padding: 0 10px;
+}
+
+#notifications button {
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: var(--accent-color);
+    color: var(--text-primary);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#notifications button:hover {
+    background-color: var(--hover-color);
+}
+
+/* Advanced styles */
+#advanced .helper {
+    text-align: right;
+    margin: 0 30px 10px 0;
+}
+
+#advanced .option {
+    text-align: right;
+    margin: 20px 30px 10px 0;
+}
+
+#advanced .option.disabled {
+    color: var(--text-secondary);
+}
+
+#advanced figure img {
+    width: 250px;
+    height: auto;
+    border: 1px solid var(--accent-color);
+    border-radius: var(--border-radius);
+}
+
+#advanced button {
+    font-size: 16px;
+    padding: 10px 20px;
+    background-color: var(--accent-color);
+    color: var(--text-primary);
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+#advanced button:hover {
+    background-color: var(--hover-color);
+}
+
+#about {
+    text-align: right;
+}
+
+#about .log {
+    margin: 25px 30px 0 0;
+}
+
+#advanced .buttons {
+    display: block;
+    width: 100%;
+    clear: both;
+    overflow: hidden;
+    text-align: center;
+}
+
+/* Override Bootstrap */
+.panel {
+    background-color: transparent;
+}
+
+#passiveMode {
+    text-align: right;
+    margin-right: 30px;
+}
+
+th {
+    text-align: center;
+}
+
+/* Loader */
 .loader {
-  border: 5px solid #f3f3f3;
-  -webkit-animation: spin 2s linear infinite;
-  animation: spin 2s linear infinite;
-  border-top: 5px solid #555;
-  border-radius: 50%;
-  width: 25px;
-  height: 25px;
-  float: right;
-  margin-left: 10px;
+    border: 3px solid var(--bg-primary);
+    border-top: 3px solid var(--accent-color);
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    animation: spin 1s linear infinite;
+    float: right;
+    margin-left: 10px;
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
 }
