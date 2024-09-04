@@ -120,6 +120,109 @@ function mazakConnect(data) {
     // $("#mainForm").submit();
 }
 
+/**
+ * Ui Changes for the new moodle.
+ */
+//-----------------------------------------------------
+function removeCourseDescription() {
+    $(document).ready(function() {
+        $('div[data-for="sectioninfo"]').remove();
+        $('#coursecontentcollapse1').remove();
+        $('.tawk-min-container').remove();
+    })
+}
+
+function modifyPageHeader() {
+    $(document).ready(function() {
+        // Target the specific element
+        var headerElement = $('.page-context-header .page-header-headings h1');
+
+        if (headerElement.length) {
+            // Change the text
+            headerElement.text('קורסים בסמסטר הנוכחי');
+
+            // Center the text and add some styling
+            headerElement.css({
+                'text-align': 'center',
+                'width': '100%',
+                'display': 'block'
+            });
+
+            // Center the entire header div
+            $('.page-context-header').css({
+                'display': 'flex',
+                'justify-content': 'center',
+                'width': '100%'
+            });
+        }
+    });
+}
+
+function transformNavbar() {
+    $(document).ready(function() {
+        $('nav.navbar').removeClass('fixed-top').addClass('fixed-right flex-column');
+
+        $('body').append($('nav.navbar'));
+
+        $('body').css('padding-right', '75px'); // Adjust this value based on your navbar width
+
+        $('.navbar-brand img').attr('src', '')
+                              .attr('alt', 'Custom Logo')
+                              .addClass('custom-logo');
+
+        var css = `
+            .navbar.fixed-right {
+                position: fixed;
+                right: 0;
+                top: 0;
+                width: 75px; 
+                height: 100vh;
+                flex-direction: column;
+                overflow-y: auto;
+            }
+            .navbar .navbar-nav {
+                flex-direction: column;
+                width: 100%;
+            }
+            .navbar .navbar-nav .nav-item {
+                width: 100%;
+            }
+            .navbar .navbar-nav .dropdown-menu {
+                position: static;
+                float: left;
+                width: 100%;
+            }
+            .primary-navigation {
+                width: 100%;
+            }
+            #usernavigation {
+                margin-top: auto;
+                width: 100%;
+            }
+            .popover-region {
+                margin-right: 10px;
+            }
+            .navbar-brand {
+                margin-bottom: 20px;
+                text-align: center;
+            }
+            .custom-logo {
+                max-width: 80%; /* Adjust as needed */
+                height: auto;
+            }
+        `;
+
+        var styleElement = $("<style>").text(css);
+        $("head").append(styleElement);
+
+        // Adjust dropdown menus to open to the left
+        $('.dropdown-menu').addClass('dropdown-menu-right');
+
+        // Move the logo to the top of the sidebar
+        $('.navbar-brand').prependTo('.navbar');
+    });
+}
+//-----------------------------------------------------
 
 /**
  * This function will manager the grades page.
@@ -611,9 +714,16 @@ function moodle(pass, data) {
     if (($("#login_username").length != 0 && $("#login_password").length != 0) && data.anonymous != true) {
         return;
     }
-
     console.log("JCT Tools-> Moodle hide user events: " + data.Config["MoodleHiddeUE"]);
 
+    removeCourseDescription();
+    console.log("JCT Tools-> Removed Unnecessary Ui Elements");
+
+    modifyPageHeader();
+    console.log("JCT Tools-> Changed The Design Of the page header");
+
+    transformNavbar();
+    console.log("JCT Tools-> Changed The Orienataion of the navbar");
 
     if (undefined == data)
         data = {};

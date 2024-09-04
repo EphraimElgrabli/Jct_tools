@@ -68,8 +68,8 @@ function addButtons(hiddeModdelHelp) {
 
     if (hiddeModdelHelp)
         return;
-    var text = "<h4>ניתן להגדיר הקורסים שלי <a href='chrome-extension://" + chrome.runtime.id + "/options.html' target='_blank'> בהגדרות</a></h4>"
-    $("#frontpage-course-list").prepend(text);
+    //var text = "<div style='text-align: center;'><h4>ניתן להגדיר הקורסים שלי <a href='chrome-extension://" + chrome.runtime.id + "/options.html' target='_blank'> בהגדרות</a></h4></div>";
+    //$("#frontpage-course-list").prepend(text);
 
 }
 

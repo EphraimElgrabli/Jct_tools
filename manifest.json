@@ -9,15 +9,21 @@
 
    "icons": {"128": "image/icons/jct128.png","16": "image/icons/jct16.png","48": "image/icons/jct48.png"},
    "browser_action": { "default_icon": "image/icons/jct128.png", "default_popup": "popup.html" },
-   "web_accessible_resources": ["options.html","background.html"],
+   "web_accessible_resources": ["options.html","background.html", "js/customCSS.css"],
    "options_page": "options.html",
    "options_ui":
    {
       "page": "options.html",
       "open_in_tab":true
    },
-
-   "permissions": ["storage","alarms", "notifications", "*://*.jct.ac.il/*"],
+   "permissions": [
+      "storage",
+      "alarms", 
+      "notifications", 
+      "*://*.jct.ac.il/*",
+      "webRequest",
+      "webRequestBlocking"
+    ],
    "update_url": "https://clients2.google.com/service/update2/crx",
    "background": {"page": "background.html"},
    "content_scripts":
