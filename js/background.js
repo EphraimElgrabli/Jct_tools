@@ -684,64 +684,55 @@ function separateCoursesData(data, courseDetails) {
 
 function getAllHomeWorksFromCalendar() {
     const promise = new Promise(function (resolve, reject) {
-        var request = $.ajax({
-            url: "https://moodle.jct.ac.il/calendar/view.php?view=upcoming",
-            type: 'GET'
-        });
-
-        request.done(function (html) {
-            var hws = [];
-            $(html).find(".eventlist .event").each(function () {
-                try {
-                    var event = {};
-                    
-                    // Getting type by icon img alt attribute
-                    var iconImg = $(this).find(".card-header .d-inline-block.mt-1 img");
-                    if (iconImg.attr("alt") === "ארועי פעילויות") {
-                        event["type"] = "homework";
-                    } else if (iconImg.attr("alt") === "אירוע משתמש") {
-                        event["type"] = "userEvent";
-                    } else {
-                        return; // Skip this event if it's not homework or user event
-                    }
-
-                    // Getting course id from attribute
-                    event["courseId"] = $(this).attr("data-course-id");
-
-                    // Getting date (timestamp) from <a>
-                    let dateLink = $(this).find(".description a").first().attr("href");
-                    let timestamp = dateLink.match(/time=(\d+)/)[1];
-                    event["deadLine"] = (new Date(parseInt(timestamp) * 1000)).toString();
-
-                    // Getting id from data attribute
-                    event["id"] = $(this).attr("data-event-id");
-
-                    // Getting name from title
-                    let eventName = $(this).find("h3.name").text().trim();
-                    if (eventName.startsWith("יש להגיש את")) {
-                        eventName = eventName.match(/יש להגיש את [''](.+)['']$/)[1];
-                    }
-                    event["name"] = (eventName.length > 33) ? (eventName.substring(0, 30) + "...") : eventName;
-
-                    hws.push(event);
-                } catch (e) {
-                    console.error(e);
-                }
-            });
-
-            resolve(hws);
-        });
-
-        request.fail(function (data) {
-            console.log("HomeWorksFromCalendar - request failed");
-            console.log(data);
-            reject();
-        });
+       var request = $.ajax({
+        url: "https://moodle.jct.ac.il/calendar/view.php?view=upcoming",
+        type: 'GET'
+       });
+       request.done(function (html) {
+           var hws = [];
+           $(html).find(".eventlist .event").each(function () {
+               try {
+                   var event = {};
+                   // Getting type by icon img alt attribute
+                   var iconImg = $(this).find(".card-header .d-inline-block.mt-1 img");
+                   if (iconImg.attr("alt") === "ארועי פעילויות") {
+                       event["type"] = "homework";
+                   } else if (iconImg.attr("alt") === "אירוע משתמש") {
+                       event["type"] = "userEvent";
+                   } else {
+                       return; // Skip this event if it's not homework or user event
+                   }
+                   // Getting course id from attribute
+                   event["courseId"] = $(this).attr("data-course-id");
+                   // Getting date (timestamp) from <a>
+                   let dateLink = $(this).find(".description a").first().attr("href");
+                   let timestamp = dateLink.match(/time=(\d+)/)[1];
+                   event["deadLine"] = (new Date(parseInt(timestamp) * 1000)).toString();
+                   // Getting id from the submission link
+                   let submissionLink = $(this).find(".card-footer a.card-link").attr("href");
+                   let idMatch = submissionLink.match(/id=(\d+)/);
+                   event["id"] = idMatch ? idMatch[1] : null;
+                   // Getting name from title
+                   let eventName = $(this).find("h3.name").text().trim();
+                   if (eventName.startsWith("יש להגיש את")) {
+                       eventName = eventName.match(/יש להגיש את [''](.+)['']$/)[1];
+                   }
+                   event["name"] = (eventName.length > 33) ? (eventName.substring(0, 30) + "...") : eventName;
+                   hws.push(event);
+               } catch (e) {
+                   console.error(e);
+               }
+           });
+           resolve(hws);
+       });
+       request.fail(function (data) {
+           console.log("HomeWorksFromCalendar - request failed");
+           console.log(data);
+           reject();
+       });
     });
-
     return promise;
-}
-
+   }
 
 /***************************************
  * Separe data from homework div

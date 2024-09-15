@@ -275,6 +275,7 @@ function insertEvents(data) {
     });
 }
 
+
 function onBackgroundEvent(eventType) {
 
     if (typeof eventType != "object")
