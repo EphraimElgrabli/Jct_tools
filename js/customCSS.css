@@ -16615,7 +16615,7 @@ iframe.mm_iframe {
 }
 
 .coursecat a {
-    color: #c9c9c9
+    color: var(--jctAccent)
 }
 
 #nav-drawer .list-group li :hover {
@@ -16636,7 +16636,9 @@ iframe.mm_iframe {
 }
 
 nav.navbar.fixed-top.navbar-light.bg-white.navbar-expand {
-    background-color: azure !important
+    padding-top: 1rem;
+    border-left: 1px solid var(--jctSecondery);
+    border-radius: 10px;
 }
 
 .notloggedin.format-site.path-login#page-login-index .loginform .login-form {
@@ -16650,7 +16652,7 @@ nav.navbar.fixed-top.navbar-light.bg-white.navbar-expand {
 }
 
 .coursecat a {
-    color: #c9c9c9
+    color: var(--jctAccent)
 }
 
 #nav-drawer .list-group li :hover {
@@ -16668,10 +16670,6 @@ nav.navbar.fixed-top.navbar-light.bg-white.navbar-expand {
 
 .list-group-item .ml-1 {
     text-indent: 5px
-}
-
-nav.navbar.fixed-top.navbar-light.bg-white.navbar-expand {
-    background-color: azure !important
 }
 
 .notloggedin.format-site.path-login#page-login-index .loginform .login-form {
@@ -16718,7 +16716,7 @@ nav.navbar.fixed-top.navbar-light.bg-white.navbar-expand {
 }
 
 .fa-fw {
-    width: 1.28574em;
+    width: 0.5em;
     text-align: center
 }
 
@@ -19720,7 +19718,41 @@ nav.navbar.fixed-top.navbar-light.bg-white.navbar-expand {
     clip: auto
 }
 
+.dark-mod {
+    --jctAccent: #8A9EDD; 
+    --jctSecondery: #7A4A6D;
+    --jctPrimary: #388FD3;
+    --jctBackground: #F8F6F7;
+    --jctText: #1F2D52;
+}
+
+.dark-mode-toggle {
+    position: fixed;
+    bottom: 20px;
+    left: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--button-bg);
+    color: var(--button-color);
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    transition: background-color 0.3s, color 0.3s;
+  }
+
 :root {
+    --jctBackground: #090708;
+    --jctAccent: #223677; 
+    --jctSecondery: #7A4A6D;
+    --jctPrimary: #2C85C9;
+    --jctText: #E4EAFC;
+    --jctSeconderyBackground: #121212;
+
     --blue: #0f6cbf;
     --indigo: #6610f2;
     --purple: #613d7c;
@@ -19783,9 +19815,9 @@ body {
     font-size: .9375rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #1d2125;
+    color: var(--jctText);
     text-align: right;
-    background-color: #f5f9fd
+    background-color: var(--jctBackground);
 }
 
 @media (max-width:1200px) {
@@ -19887,7 +19919,7 @@ sup {
 }
 
 a {
-    color: #59009b;
+    color: var(--jctPrimary);
     text-decoration: none;
     background-color: transparent
 }
@@ -24614,7 +24646,7 @@ input[type="button"].btn-block {
     }
 
     .navbar-expand-md .navbar-nav {
-        flex-direction: row
+        flex-direction: column
     }
 
     .navbar-expand-md .navbar-nav .dropdown-menu {
@@ -24761,7 +24793,7 @@ input[type="button"].btn-block {
 
 .navbar-expand {
     flex-flow: row nowrap;
-    justify-content: flex-start
+    justify-content: space-between;
 }
 
 .navbar-expand>.container,
@@ -24775,7 +24807,7 @@ input[type="button"].btn-block {
 }
 
 .navbar-expand .navbar-nav {
-    flex-direction: row
+    flex-direction: column
 }
 
 .navbar-expand .navbar-nav .dropdown-menu {
@@ -27023,7 +27055,7 @@ button.bg-dark:focus {
 }
 
 .bg-white {
-    background-color: #fff !important
+    background-color: var(--jctSeconderyBackground) !important
 }
 
 .bg-transparent {
@@ -28383,7 +28415,7 @@ button.bg-dark:focus {
 
 .mr-1,
 .mx-1 {
-    margin-left: .25rem !important
+    margin-left: 0 !important
 }
 
 .mb-1,
@@ -45493,20 +45525,10 @@ span[data-flexitour="container"][x-placement="right-start"] div[data-role="arrow
     }
 }
 
-@media (min-width:576px) {
-    #page.drawers .main-inner {
-        margin-top: 1.5rem
-    }
-
-    #page.drawers .drawer-right-toggle {
-        margin-left: .7rem
-    }
-}
 
 @media (min-width:768px) {
     #page.drawers {
-        padding-right: 3rem;
-        padding-left: 3rem
+        padding-right: 61px;
     }
 
     #page.drawers .main-inner {
@@ -46129,12 +46151,16 @@ div.editor_atto_toolbar button .icon {
 }
 
 .navbar.fixed-top {
-    padding-top: 0;
-    padding-bottom: 0;
-    box-shadow: none;
-    border-bottom: #dee2e6 1px solid;
-    align-items: stretch;
-    height: 61px
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: auto;
+    width: 61px; /* Same as the original height */
+    height: 100vh;
+    z-index: 1030;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .navbar.fixed-top .navbar-brand .logo {
@@ -47056,11 +47082,12 @@ div.editor_atto_toolbar button .icon {
 }
 
 .primary-navigation .navigation {
-    height: 60px
+    height: 60px;
 }
 
 .primary-navigation .navigation .nav-link {
-    height: 60px;
+    height: 37px;
+    width: 37px;
     color: #1d2125;
     border-top: 3px solid transparent
 }
@@ -47211,10 +47238,6 @@ div.editor_atto_toolbar button .icon {
 body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale
-}
-
-.navbar {
-    box-shadow: 0 2px 4px rgba(0, 0, 0, .08)
 }
 
 .userpicture {
@@ -47393,10 +47416,14 @@ button.bg-gray:focus {
 
 .navbar-brand,
 .navbar-brand .logo {
-    height: 100%;
+    height: 40px;
     width: auto
 }
-
+.navbar.fixed-top .navbar-brand .logo {
+    max-height: 40px; /* Adjust this value as needed */
+    max-width: 40px; /* Adjust this value as needed */
+    object-fit: contain;
+}
 .navbar.navbar-dark.bg-dark,
 .navbar.navbar-dark.bg-primary {
     border-bottom: none
@@ -48000,12 +48027,9 @@ body.pagelayout-login:not(.loginbackgroundimage) #footnote {
 }
 
 .bg-white {
-    background-color: #fff !important
+    background-color: var(--jctSeconderyBackground) !important
 }
 
-.navbar.fixed-top {
-    box-shadow: 0 0 15px 0 rgba(0, 0, 0, .3) !important
-}
 
 .custom-control-input:checked~.custom-control-label::before {
     background-color: #20c997

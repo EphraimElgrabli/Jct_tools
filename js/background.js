@@ -84,6 +84,8 @@ function messageListener(request, sender, sendResponse) {
         backgroundEvent({type: "ExternalMessage", operationCompleted: true});
     }
 }
+
+
 /*****************************************************************
  * FUNCTION
  *    backgroundEvent
@@ -685,55 +687,47 @@ function getAllHomeWorksFromCalendar() {
         var request = $.ajax({
             url: "https://moodle.jct.ac.il/calendar/view.php?view=upcoming",
             type: 'GET'
-
         });
 
         request.done(function (html) {
             var hws = [];
-            $(html).find(".eventlist").find(".event").each(function () {
+            $(html).find(".eventlist .event").each(function () {
                 try {
                     var event = {};
-                    var iconHtml;
-
-                    //Getting type by icon img alt attribute
-                    iconHtml = $(this).find(".card-header div:not(.commands) .icon");
-                    //Ignore attendance events
-                    if ($(iconHtml).length > 0 && $(iconHtml).attr("title").includes("attendance"))
-                        return;
-                    //Getting tilte attribute
-                    iconHtml = $(iconHtml).attr("title")
-                    if (iconHtml === "ארועי פעילויות")
+                    
+                    // Getting type by icon img alt attribute
+                    var iconImg = $(this).find(".card-header .d-inline-block.mt-1 img");
+                    if (iconImg.attr("alt") === "ארועי פעילויות") {
                         event["type"] = "homework";
-                    else if (iconHtml === "אירוע משתמש")
+                    } else if (iconImg.attr("alt") === "אירוע משתמש") {
                         event["type"] = "userEvent";
-                    else
-                        return // Prevent bug;
+                    } else {
+                        return; // Skip this event if it's not homework or user event
+                    }
 
-                    //Getting course id from attribute
+                    // Getting course id from attribute
                     event["courseId"] = $(this).attr("data-course-id");
 
-                    //Getting date (timestamp) from <a> ex https://moodle.jct.ac.il/calendar/view.php?view=day&amp;time=1540155600
-                    let dateLink = $(this).find(".description").find("a").attr("href");
-                    // Add a 000 in order to convert to miliseconds
-                    event["deadLine"] = (new Date(parseInt(dateLink.substring(dateLink.lastIndexOf("=") + 1) + "000"))).toString();
+                    // Getting date (timestamp) from <a>
+                    let dateLink = $(this).find(".description a").first().attr("href");
+                    let timestamp = dateLink.match(/time=(\d+)/)[1];
+                    event["deadLine"] = (new Date(parseInt(timestamp) * 1000)).toString();
 
-                    // Getting id from url ex : https://moodle.jct.ac.il/mod/assign/view.php?id=336730;
-                    let idLink = $(this).find(".description").find("a").attr("href");
-                    event["id"] = parseInt(idLink.substring(idLink.lastIndexOf("=") + 1));
+                    // Getting id from data attribute
+                    event["id"] = $(this).attr("data-event-id");
 
-                    //Getting name from title
-                    let eventName = $(this).find("h3").text();
-                    // Try to remove text "יש להגיש את" with regex
-                    if (eventName.includes("יש להגיש"))
-                        eventName = eventName.match("יש להגיש את \'([^)]+)\'")[1];
-                    //In case that title is too big, remove part of it
-                    event["name"] = (eventName.length > 33 ? (eventName.substring(0, 30) + "...") : eventName );
+                    // Getting name from title
+                    let eventName = $(this).find("h3.name").text().trim();
+                    if (eventName.startsWith("יש להגיש את")) {
+                        eventName = eventName.match(/יש להגיש את [''](.+)['']$/)[1];
+                    }
+                    event["name"] = (eventName.length > 33) ? (eventName.substring(0, 30) + "...") : eventName;
 
                     hws.push(event);
                 } catch (e) {
-                    console.error(e)
+                    console.error(e);
                 }
-            })
+            });
 
             resolve(hws);
         });
@@ -744,6 +738,7 @@ function getAllHomeWorksFromCalendar() {
             reject();
         });
     });
+
     return promise;
 }
 

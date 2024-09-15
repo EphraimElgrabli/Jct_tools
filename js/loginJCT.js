@@ -128,7 +128,9 @@ function removeCourseDescription() {
     $(document).ready(function() {
         $('div[data-for="sectioninfo"]').remove();
         $('#coursecontentcollapse1').remove();
-        $('.tawk-min-container').remove();
+        $('.course-content').remove();
+        $('.box.py-3.d-flex.justify-content-center').remove();
+        $('.page-context-header').remove();
     })
 }
 
@@ -138,8 +140,6 @@ function modifyPageHeader() {
         var headerElement = $('.page-context-header .page-header-headings h1');
 
         if (headerElement.length) {
-            // Change the text
-            headerElement.text('קורסים בסמסטר הנוכחי');
 
             // Center the text and add some styling
             headerElement.css({
@@ -158,70 +158,30 @@ function modifyPageHeader() {
     });
 }
 
-function transformNavbar() {
+function darkModeInjector() {
     $(document).ready(function() {
-        $('nav.navbar').removeClass('fixed-top').addClass('fixed-right flex-column');
+        // Target the specific element
+        var headerElement = $('.page-context-header .page-header-headings h1');
 
-        $('body').append($('nav.navbar'));
+        if (headerElement.length) {
 
-        $('body').css('padding-right', '75px'); // Adjust this value based on your navbar width
+            // Center the text and add some styling
+            headerElement.css({
+                'text-align': 'center',
+                'width': '100%',
+                'display': 'block'
+            });
 
-        $('.navbar-brand img').attr('src', '')
-                              .attr('alt', 'Custom Logo')
-                              .addClass('custom-logo');
-
-        var css = `
-            .navbar.fixed-right {
-                position: fixed;
-                right: 0;
-                top: 0;
-                width: 75px; 
-                height: 100vh;
-                flex-direction: column;
-                overflow-y: auto;
-            }
-            .navbar .navbar-nav {
-                flex-direction: column;
-                width: 100%;
-            }
-            .navbar .navbar-nav .nav-item {
-                width: 100%;
-            }
-            .navbar .navbar-nav .dropdown-menu {
-                position: static;
-                float: left;
-                width: 100%;
-            }
-            .primary-navigation {
-                width: 100%;
-            }
-            #usernavigation {
-                margin-top: auto;
-                width: 100%;
-            }
-            .popover-region {
-                margin-right: 10px;
-            }
-            .navbar-brand {
-                margin-bottom: 20px;
-                text-align: center;
-            }
-            .custom-logo {
-                max-width: 80%; /* Adjust as needed */
-                height: auto;
-            }
-        `;
-
-        var styleElement = $("<style>").text(css);
-        $("head").append(styleElement);
-
-        // Adjust dropdown menus to open to the left
-        $('.dropdown-menu').addClass('dropdown-menu-right');
-
-        // Move the logo to the top of the sidebar
-        $('.navbar-brand').prependTo('.navbar');
+            // Center the entire header div
+            $('.page-context-header').css({
+                'display': 'flex',
+                'justify-content': 'center',
+                'width': '100%'
+            });
+        }
     });
 }
+
 //-----------------------------------------------------
 
 /**
@@ -722,8 +682,6 @@ function moodle(pass, data) {
     modifyPageHeader();
     console.log("JCT Tools-> Changed The Design Of the page header");
 
-    transformNavbar();
-    console.log("JCT Tools-> Changed The Orienataion of the navbar");
 
     if (undefined == data)
         data = {};
@@ -733,33 +691,17 @@ function moodle(pass, data) {
 
     hideCourses(data.moodleCoursesTable, data.Config.hiddeModdelHelp);
 
-
     var courseId;
     $(".event").each(function () {
-
         if ($(this).find("img").attr("alt") == "אירוע משתמש") {
             if (data.Config["MoodleHiddeUE"])
                 $(this).remove();
         } else {
-
-            /********** Delete homeworks done***************
-             homeworkId = ($(this).find("a"))[0];
-             homeworkId = $(homeworkId).attr('href');
-             homeworkId = homeworkId.substring(homeworkId.lastIndexOf("id")+3);
-             if(data.eventDone[homeworkId] != null && data.eventDone[homeworkId].checked)
-             $(this).remove();
-             ************************************************/
-
             if (data.Config.hiddeNoSelectedCourseInMoodle) {
-                /**************************************
-                 * Search the homework course id
-                 ***************************************/
-                //data.Config.hiddeNoSelectedCourseInWindows == true &&
                 courseId = $(this).find('.course').find('a');
                 if (courseId == undefined || courseId.length == 0)
                     return undefined;
                 courseId = $(courseId).attr('href');
-                // Get id from href (ex: https://moodle.jct.ac.il/course/view.php?id=28513)
                 courseId = courseId.substring(courseId.lastIndexOf("id") + 3);
                 if (data.moodleCoursesTable[courseId] != true) {
                     console.log("JCT Tools->Homework with course id: " + courseId + " deleted");
@@ -767,9 +709,7 @@ function moodle(pass, data) {
                     $(this).remove();
                 }
             }
-
         }
-
     });
 
     if (data.Config["moodleTopic"])
@@ -782,20 +722,13 @@ function moodle(pass, data) {
         $("#block-region-side-post").prepend(eventsDiv);
     }
 
-
     if (data.testsDate != undefined && data.Config.showTestDay != false) {
-
-        //var to save all courses in "mycourses"
         var mycourses = Object.keys(data.moodleCoursesTable);
-        //var to save the current course
         var courseTest;
-        //save the course test in html format
         var courseHtml;
-        // Save the place where the extension will save insert the data
         var li;
 
         for (var i = 0; i < mycourses.length; i++) {
-
             courseTest = data.courses[mycourses[i]];
 
             if (courseTest == undefined || courseTest.id == undefined)
@@ -807,7 +740,6 @@ function moodle(pass, data) {
             if (courseTest == undefined)
                 continue;
 
-
             courseHtml = getCourseSpan(courseTest);
             if (courseHtml == null)
                 continue;
@@ -816,10 +748,18 @@ function moodle(pass, data) {
             $(li).append(courseHtml);
             $(li).css({"text-align": "center", "color": "#0070a8", "font-weight": "bold", "margin-left": "15px"});
         }
-
     }
 
+    function removeTawkContainer() {
+        if ($('.tawk-min-container').length) {
+            $('.tawk-min-container').remove();
+            console.log("JCT Tools-> Tawk container removed");
+        } else {
+            setTimeout(removeTawkContainer, 500); // Check every 500ms
+        }
+    }
 
+    removeTawkContainer();
 }
 
 function getCourseSpan(courseTest) {

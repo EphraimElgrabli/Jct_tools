@@ -172,137 +172,106 @@ function change(flag) {
 }
 
 function insertEvents(data) {
+    console.log("Inserting events:", data);
     $(".event").remove();
-    var events = data.tasks;
-    if(data.testsTasksDate != null)
-        events = events.concat(data.testsTasksDate).sort(function (t1,t2) {return Date.parse(t1.deadLine)- Date.parse(t2.deadLine)});
-    if (events == undefined)
-        return;
-    var event;
-    var deadLine = new Date();
-    var checked;
+    var events = data.tasks || [];
+    if (data.testsTasksDate) {
+        events = events.concat(data.testsTasksDate);
+    }
+    events.sort((a, b) => new Date(a.deadLine) - new Date(b.deadLine));
+
+    var now = new Date();
     var duplicate = {};
-    for (var i = 0; i <= events.length; i++) {
 
-        // Check if the event already finish
-        if (events[i] == null || Date.parse(events[i].deadLine) < Date.now())
-            continue;
+    events.forEach(event => {
+        if (!event || new Date(event.deadLine) < now) return;
 
-        // Check if the user want to show user events
-        if (data.Config != undefined) {
-
-            if (data.Config.hiddeUE && events[i].type == "userEvent")
-                continue;
-
-            if (data.Config.hwDays != null && Date.parse(events[i].deadLine) > (Date.now() + data.Config.hwDays * 24 * 60 * 60 * 1000))
-                continue;
-
-            if (events[i].type == "homework") {
-
-                if (data.Config.hiddeNoSelectedCourseInWindows == true && data.moodleCoursesTable[events[i].courseId] != true)
-                    continue;
-
-
-                /*
-                 * In this part the program will check if the user limited the total of homeworks
-                 * Is important to remember that the homework are sorted by deadline
-                 * in this case the program will save the last homework deadline to check with the next.
-                 */
-
-                if (duplicate[events[i].courseId] == null) {
-                    duplicate[events[i].courseId] = {};
-                    duplicate[events[i].courseId].lastDeadLine = events[i].deadLine;
-                    duplicate[events[i].courseId].counter = 1;
+        if (data.Config) {
+            if (data.Config.hiddeUE && event.type === "userEvent") return;
+            if (data.Config.hwDays && new Date(event.deadLine) > new Date(now.getTime() + data.Config.hwDays * 24 * 60 * 60 * 1000)) return;
+            if (event.type === "homework") {
+                if (data.Config.hiddeNoSelectedCourseInWindows && !data.moodleCoursesTable[event.courseId]) return;
+                if (!duplicate[event.courseId]) {
+                    duplicate[event.courseId] = { lastDeadLine: event.deadLine, counter: 1 };
                 } else {
-
-                    if (data.Config.hiddeSameDay && Date.parse(events[i].deadLine) == Date.parse(duplicate[events[i].courseId].lastDeadLine))
-                        continue;
-
-                    if (data.Config.limitedHw && duplicate[events[i].courseId].counter >= data.Config.limitedHwAmount)
-                        continue;
-
-
-                    duplicate[events[i].courseId].lastDeadLine = events[i].deadLine;
-                    duplicate[events[i].courseId].counter++;
+                    if (data.Config.hiddeSameDay && event.deadLine === duplicate[event.courseId].lastDeadLine) return;
+                    if (data.Config.limitedHw && duplicate[event.courseId].counter >= data.Config.limitedHwAmount) return;
+                    duplicate[event.courseId].lastDeadLine = event.deadLine;
+                    duplicate[event.courseId].counter++;
                 }
-
             }
-
-
         }
 
-        // Check if the user already did the homework
-        if (data.eventDone != undefined && data.eventDone[events[i].id] != null) {
-            //Check if the user want to hide tasks done
-            if (data.Config != null && data.Config.hiddeTasksDone != false && data.eventDone[events[i].id].checked)
-                continue;
-
-            checked = ((data.eventDone[events[i].id].checked || data.eventDone[events[i].id].done) ? "checked" : " ") + ((data.eventDone[events[i].id].done) ? " disabled" : " ");
-        }
-        else
-            checked = "";
-
-        // Create a new object
-        event = "<span class='event "+(events[i].type == "test" ? "event-test" : "")+"'>";
-
-        if (events[i].type == "homework")
-            event += "<input type='checkbox' class='done' courseId='" + events[i].id + "' + " + checked + " />";
-        else
-            event += "<input type='checkbox' style='visibility: hidden;' />";
-
-
-        if (events[i].type == "homework")
-            event += "<a href='https://moodle.jct.ac.il/mod/assign/view.php?id=" + events[i].id + "' target='_blank'><span class='eventDetails'>" + "<p class='name'>" + events[i].name + "</p>";
-        else if (events[i].type == "test")
-            event += "<span class='eventDetails'>" + "<p class='name'><a href='https://levnet.jct.ac.il/Student/TestRooms.aspx' target='_blank'>" + events[i].name + "</a></p>";
-        else
-            event += "<span class='eventDetails'>" + "<p class='name'>" + events[i].name + "</p>";
-
-
-        if (events[i].type == "homework")
-            event += "<p class='courseName'>" + data.courses[events[i].courseId].name + "</p>";
-        if (events[i].type == "test")
-            event += "<p class='courseName'>" + events[i].courseName + "</p>";
-
-        event += "<p class='deadLine'>" + getDate(new Date(Date.parse(events[i].deadLine))) + "</p>" +
-            "</span>";
-
-        if (events[i].type == "homework")
-            event += "</a>";
-
-        if (events[i].type != "test") {
-            if (data.eventDone != undefined && data.eventDone[events[i].id] != null && data.eventDone[events[i].id].notifications == false)
-                event += "<img src='image/popup/timbreOff.png' class='notifi'  courseId='" + events[i].id + "'>";
-            else
-                event += "<img src='image/popup/timbre.png' class='notifi'  courseId='" + events[i].id + "'>";
+        var checked = "";
+        if (data.eventDone && data.eventDone[event.id]) {
+            if (data.Config && data.Config.hiddeTasksDone !== false && data.eventDone[event.id].checked) return;
+            checked = ((data.eventDone[event.id].checked || data.eventDone[event.id].done) ? "checked" : "") + 
+                      ((data.eventDone[event.id].done) ? " disabled" : "");
         }
 
-        event += "</span>";
-        $("#homeworksContent").append(event);
-    } 		//notifications
+        var eventHtml = `<span class='event ${event.type === "test" ? "event-test" : ""}'>`;
+
+        if (event.type === "homework") {
+            eventHtml += `<input type='checkbox' class='done' courseId='${event.id}' ${checked} />`;
+        } else {
+            eventHtml += `<input type='checkbox' style='visibility: hidden;' />`;
+        }
+
+        if (event.type === "homework") {
+            eventHtml += `<a href='https://moodle.jct.ac.il/mod/assign/view.php?id=${event.id}' target='_blank'>`;
+        }
+        eventHtml += `<span class='eventDetails'><p class='name'>`;
+        
+        if (event.type === "test") {
+            eventHtml += `<a href='https://levnet.jct.ac.il/Student/TestRooms.aspx' target='_blank'>`;
+        }
+        eventHtml += `${event.name}`;
+        if (event.type === "test") {
+            eventHtml += `</a>`;
+        }
+        eventHtml += `</p>`;
+
+        if (event.type === "homework") {
+            if (data.courses && data.courses[event.courseId]) {
+                eventHtml += `<p class='courseName'>${data.courses[event.courseId].name}</p>`;
+            } else {
+                console.warn(`Course not found for id: ${event.courseId}`);
+                eventHtml += `<p class='courseName'>Unknown Course</p>`;
+            }
+        } else if (event.type === "test") {
+            eventHtml += `<p class='courseName'>${event.courseName || 'Unknown Course'}</p>`;
+        }
+
+        eventHtml += `<p class='deadLine'>${getDate(new Date(event.deadLine))}</p></span>`;
+
+        if (event.type === "homework") {
+            eventHtml += `</a>`;
+        }
+
+        if (event.type !== "test") {
+            var notificationSrc = (data.eventDone && data.eventDone[event.id] && data.eventDone[event.id].notifications === false) 
+                ? "image/popup/timbreOff.png" : "image/popup/timbre.png";
+            eventHtml += `<img src='${notificationSrc}' class='notifi' courseId='${event.id}'>`;
+        }
+
+        eventHtml += `</span>`;
+        $("#homeworksContent").append(eventHtml);
+    });
 
     $("#eventsTotal").text($(".event").length);
     $("#lastHwUpdate").text(formatDate(data.lastHWUpdate));
-    $(".notifi").click(function () {
+
+    $(".notifi").click(function() {
         var currentUrl = $(this).attr("src");
-        if (currentUrl == "image/popup/timbre.png") {
-            $(this).attr("src", "image/popup/timbreOff.png");
-            DataAccess.setObjectInObject("eventDone", $(this).attr("courseId"), "notifications", false);
-        }
-        else {
-            $(this).attr("src", "image/popup/timbre.png");
-            DataAccess.setObjectInObject("eventDone", $(this).attr("courseId"), "notifications", true);
-        }
-        setTimeout(function () {
-            chrome.runtime.sendMessage({setBadge: true});
-        }, 20);
+        var newUrl = currentUrl === "image/popup/timbre.png" ? "image/popup/timbreOff.png" : "image/popup/timbre.png";
+        $(this).attr("src", newUrl);
+        DataAccess.setObjectInObject("eventDone", $(this).attr("courseId"), "notifications", newUrl === "image/popup/timbre.png");
+        setTimeout(() => chrome.runtime.sendMessage({setBadge: true}), 20);
     });
-    $(".done").change(function () {
-        //in case flag is true then set as c (checked) otherwise set as u (unchecked)
+
+    $(".done").change(function() {
         DataAccess.setObjectInObject("eventDone", $(this).attr("courseId"), "checked", this.checked);
-        setTimeout(function () {
-            chrome.runtime.sendMessage({setBadge: true});
-        }, 20);
+        setTimeout(() => chrome.runtime.sendMessage({setBadge: true}), 20);
     });
 }
 
