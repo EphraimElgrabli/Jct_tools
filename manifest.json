@@ -9,7 +9,7 @@
 
    "icons": {"128": "image/icons/jct128.png","16": "image/icons/jct16.png","48": "image/icons/jct48.png"},
    "browser_action": { "default_icon": "image/icons/jct128.png", "default_popup": "popup.html" },
-   "web_accessible_resources": ["options.html","background.html", "js/customCSS.css"],
+   "web_accessible_resources": ["options.html","background.html", "js/customCSS.css", "image/ModernUi/Logo.svg"],
    "options_page": "options.html",
    "options_ui":
    {

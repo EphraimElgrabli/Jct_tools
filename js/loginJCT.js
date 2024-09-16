@@ -126,12 +126,63 @@ function mazakConnect(data) {
 //-----------------------------------------------------
 function removeCourseDescription() {
     $(document).ready(function() {
+        // Your existing removals
         $('div[data-for="sectioninfo"]').remove();
         $('#coursecontentcollapse1').remove();
         $('.course-content').remove();
         $('.box.py-3.d-flex.justify-content-center').remove();
         $('.page-context-header').remove();
-    })
+        $('.drawer.drawer-left.drawer-primary.d-print-none').remove();
+        $('.drawer.drawer-right.d-print-none').remove();
+        $('.drawer.bg-white.hidden').remove();
+        $('.drawers.drag-container').remove();
+        $('widget-visible').remove();
+        $('.ByrdhouseOverlay').remove();
+        $('.toast-wrapper.mx-auto.py-0.fixed-top').remove();
+
+        // Function to remove the span
+        function removeUserNotifications() {
+            var userNotificationsSpan = document.body.querySelector(':scope > span#user-notifications');
+            if (userNotificationsSpan) {
+                userNotificationsSpan.remove();
+                console.log('user-notifications span removed');
+                return true;
+            }
+            console.log('user-notifications span not found');
+            return false;
+        }
+
+        // Try to remove immediately
+        removeUserNotifications();
+
+        // Set up a mutation observer to watch for changes to the body
+        var observer = new MutationObserver(function(mutations) {
+            mutations.forEach(function(mutation) {
+                if (mutation.type === 'childList') {
+                    if (removeUserNotifications()) {
+                        observer.disconnect(); // Stop observing once we've removed the span
+                    }
+                }
+            });
+        });
+
+        // Configuration of the observer
+        var config = { childList: true, subtree: true };
+
+        // Start observing the body for changes
+        observer.observe(document.body, config);
+
+        // Also try to remove after a delay
+        setTimeout(removeUserNotifications, 2000); // 2 second delay
+    });
+}
+
+function replaceLogo() {
+    const logoImg = document.querySelector('img.logo[alt="לב"]');
+    if (logoImg) {
+        logoImg.src = chrome.runtime.getURL('image/ModernUi/Logo.svg');
+        logoImg.srcset = ''; // Clear any srcset to ensure our image is always used
+    }
 }
 
 function modifyPageHeader() {
@@ -679,9 +730,11 @@ function moodle(pass, data) {
     removeCourseDescription();
     console.log("JCT Tools-> Removed Unnecessary Ui Elements");
 
-    modifyPageHeader();
+    //modifyPageHeader();
     console.log("JCT Tools-> Changed The Design Of the page header");
 
+    replaceLogo();
+    console.log("JCT Tools-> Replacing the logo with a modern one");
 
     if (undefined == data)
         data = {};
