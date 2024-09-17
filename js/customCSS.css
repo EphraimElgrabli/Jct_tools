@@ -283,19 +283,22 @@ nav.navbar:hover .moremenu .nav-item:hover .dropdown-menu {
 }
 
 .simplesearchform {
-    position: relative;
+    position: static;
 }
 
 #searchform-navbar {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    width: 300px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    max-width: 500px;
     background-color: var(--jctAccent);
     border-radius: 8px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
     overflow: hidden;
     transition: all 0.3s ease;
+    z-index: 1050;
 }
 
 #searchform-navbar.collapse:not(.show) {
@@ -304,7 +307,7 @@ nav.navbar:hover .moremenu .nav-item:hover .dropdown-menu {
 
 .searchform-navbar {
     display: flex;
-    padding: 10px;
+    padding: 20px;
 }
 
 .input-group {
@@ -312,28 +315,23 @@ nav.navbar:hover .moremenu .nav-item:hover .dropdown-menu {
     width: 100%;
 }
 
-#searchinput-66e9ad58d5ac666e9ad58d4b2f3 {
+.form-control {
     flex-grow: 1;
-    border: none;
-    background-color: var(--jctBackground);
-    color: var(--jctText);
-    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    border: 1px solid var(--jctText);
+    border-radius: 4px;
+    margin-left: 10px;
+    margin-right: 10px;
     font-size: 16px;
-    padding: 10px 15px;
-    border-radius: 4px 0 0 4px;
-}
-
-#searchinput-66e9ad58d5ac666e9ad58d4b2f3::placeholder {
-    color: var(--jctText);
-    opacity: 0.6;
 }
 
 .btn-close {
-    background-color: var(--jctBackground);
-    border: none;
+    border-radius: 50%;
     color: var(--jctText);
-    padding: 10px;
+    padding: 2px;
     transition: color 0.2s ease;
+    position: absolute;
+    top: 1%;
+    right: 1%;
 }
 
 .btn-close:hover {
@@ -341,11 +339,11 @@ nav.navbar:hover .moremenu .nav-item:hover .dropdown-menu {
 }
 
 .btn-submit {
-    background-color: var(--jctPrimary);
+    background-color: var(--jctText);
     border: none;
     color: var(--jctBackground);
-    padding: 10px 15px;
-    border-radius: 0 4px 4px 0;
+    padding: 10px 10px;
+    border-radius: 50%;
     transition: background-color 0.2s ease;
 }
 
@@ -369,19 +367,30 @@ nav.navbar:hover .moremenu .nav-item:hover .dropdown-menu {
     font-size: 18px;
 }
 
+/* Overlay for background when search is open */
+.search-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+
+.search-overlay.show {
+    display: block;
+}
+
 /* Responsive adjustments */
 @media (max-width: 768px) {
     #searchform-navbar {
-        width: 100%;
-        position: fixed;
-        top: 0;
-        left: 0;
-        right: 0;
-        border-radius: 0;
+        width: 90%;
     }
 
     .searchform-navbar {
-        padding: 5px;
+        padding: 15px;
     }
 
     .btn-close,
