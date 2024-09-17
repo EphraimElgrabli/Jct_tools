@@ -4,23 +4,23 @@
     --jctPrimary: #388FD3;
     --jctBackground: #F8F6F7;
     --jctText: #1F2D52;
-  }
-  
-  body {
+}
+
+body {
     display: grid;
     margin: 40px;
     padding: 0;
     overflow-x: hidden;
     grid-template-columns: repeat(13, minmax(0, 1fr));
     grid-template-rows: repeat(8, minmax(0, 1fr));
-    gap: 20;
+    gap: 20px;
     background-color: var(--jctBackground);
     max-height: calc(100vh - 80px);
-    max-width: calc(100vw - 80px); /* Subtract total horizontal margin */
+    max-width: calc(100vw - 80px);
     box-sizing: border-box;
-  }
-  
-  nav.navbar {
+}
+
+nav.navbar {
     border-radius: 15px;
     grid-column: 13;
     grid-row: 1 / -1;
@@ -30,24 +30,499 @@
     margin: 10px;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
-  }
-  nav.navbar:hover{
-    grid-column: 12 13;
-  }
-  .logo.mr-1 {
-    max-width: 50px;
-    padding: 21px;
-  }
+    padding: 10px 0;
+    transition: all 0.3s ease;
+    overflow: hidden;
+    z-index: 10;
+}
 
-  .moremenu .nav-link {
+nav.navbar:hover {
+    grid-column: 11 / 14; 
+    margin-left: -200%; 
+}
+
+.logo.mr-1 {
+    max-width: 40px;
+    padding: 21px;
+    margin-bottom: 20px;
+}
+
+.moremenu {
+    width: 100%;
+    transition: opacity 0.3s ease;
+}
+
+.nav.more-nav.navbar-nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+nav.navbar:hover .nav.more-nav.navbar-nav {
+    align-items: flex-start;
+}
+
+.moremenu .nav-item {
+    width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.moremenu .nav-link {
     color: var(--jctText);
-    font-family: 'Fb CoherentiSansEnHeb';
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
     text-decoration: none;
-    font-size: 1.5em;
-    padding: 10px;
+    font-size: 1.2em;
+    padding: 15px 10px;
     display: flex;
     align-items: center;
-  }
-  
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+nav.navbar:hover .moremenu .nav-link {
+    justify-content: flex-start;
+}
+
+.moremenu .nav-link:hover {
+    color: var(--jctSecondary);
+}
+
+.moremenu .dropdown-menu {
+    display: none;
+    background-color: var(--jctAccent);
+    border: none;
+    border-radius: 10px;
+    box-shadow: none;
+    position: static;
+    width: 100%;
+    padding-left: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.dropdown-menu {
+    display: flex;
+    align-content: flex-end;
+}
+
+nav.navbar:hover .moremenu .nav-item:hover .dropdown-menu {
+    display: flex;
+    flex-direction: column;
+    opacity: 1;
+    margin-bottom: 20%;
+    & .dropdown-item {
+        margin-left: -20%;
+    }
+
+}
+
+.moremenu .dropdown-item {
+    color: var(--jctText);
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    padding: 10px 15px;
+    transition: color 0.3s ease;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.dropdown-item {
+    font-size: 15px;
+    text-decoration: none;
+}
+
+.moremenu .dropdown-item:hover {
+    background-color: transparent;
+    color: var(--jctSecondary);
+}
+
+@media (max-height: 600px) {
+    .moremenu .nav-link {
+        font-size: 1em;
+        padding: 10px 5px;
+    }
+}
+
+/* User Menu Styles */
+.usermenu {
+    position: relative;
+}
+
+.userbutton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: var(--jctText);
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+
+.userinitials {
+    font-size: 18px;
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    font-weight: bold;
+    color: var(--jctBackground);
+}
+
+.dropdown-menu {
+    display: none;
+    background-color: var(--jctAccent);
+    border-radius: 8px;
+    padding: 20px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 250px;
+    max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1050;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+}
+
+.dropdown-menu.show {
+    display: block;
+}
+
+.dropdown-item {
+    color: var(--jctText);
+    padding: 12px 16px;
+    font-size: 16px;
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    transition: background-color 0.2s ease, color 0.2s ease;
+    display: block;
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.dropdown-item:hover {
+    background-color: var(--jctPrimary);
+    color: var(--jctBackground);
+}
+
+.dropdown-divider {
+    border-top: 1px solid var(--jctSecondary);
+    margin: 12px 0;
+    opacity: 0.2;
+}
+
+/* Hover effect for the avatar */
+.userbutton:hover {
+    box-shadow: 0 0 0 2px var(--jctSecondary);
+    transition: box-shadow 0.2s ease;
+}
+
+/* Style adjustments for the dropdown toggle */
+.btn.dropdown-toggle {
+    padding: 0;
+    border: none;
+    background: none;
+}
+
+.btn.dropdown-toggle:focus {
+    box-shadow: none;
+}
+
+/* Overlay for background when dropdown is open */
+.dropdown-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}
+
+.dropdown-overlay.show {
+    display: block;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .userbutton {
+        width: 36px;
+        height: 36px;
+    }
+
+    .userinitials {
+        font-size: 14px;
+    }
+
+    .dropdown-menu {
+        padding: 15px;
+        min-width: 200px;
+    }
+
+    .dropdown-item {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+}
+
+.simplesearchform {
+    position: relative;
+}
+
+#searchform-navbar {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 300px;
+    background-color: var(--jctAccent);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+#searchform-navbar.collapse:not(.show) {
+    display: none;
+}
+
+.searchform-navbar {
+    display: flex;
+    padding: 10px;
+}
+
+.input-group {
+    display: flex;
+    width: 100%;
+}
+
+#searchinput-66e9ad58d5ac666e9ad58d4b2f3 {
+    flex-grow: 1;
+    border: none;
+    background-color: var(--jctBackground);
+    color: var(--jctText);
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    font-size: 16px;
+    padding: 10px 15px;
+    border-radius: 4px 0 0 4px;
+}
+
+#searchinput-66e9ad58d5ac666e9ad58d4b2f3::placeholder {
+    color: var(--jctText);
+    opacity: 0.6;
+}
+
+.btn-close {
+    background-color: var(--jctBackground);
+    border: none;
+    color: var(--jctText);
+    padding: 10px;
+    transition: color 0.2s ease;
+}
+
+.btn-close:hover {
+    color: var(--jctSecondary);
+}
+
+.btn-submit {
+    background-color: var(--jctPrimary);
+    border: none;
+    color: var(--jctBackground);
+    padding: 10px 15px;
+    border-radius: 0 4px 4px 0;
+    transition: background-color 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: var(--jctSecondary);
+}
+
+.btn-open {
+    background-color: transparent;
+    border: none;
+    color: var(--jctText);
+    padding: 10px;
+    transition: color 0.2s ease;
+}
+
+.btn-open:hover {
+    color: var(--jctSecondary);
+}
+
+.icon {
+    font-size: 18px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    #searchform-navbar {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        border-radius: 0;
+    }
+
+    .searchform-navbar {
+        padding: 5px;
+    }
+
+    .btn-close,
+    .btn-submit,
+    .btn-open {
+        padding: 8px;
+    }
+}
+
+/* Notifications Popover Styles */
+.popover-region {
+    position: relative;
+}
+
+.popover-region-toggle {
+    cursor: pointer;
+    color: var(--jctText);
+    padding: 10px;
+    transition: color 0.2s ease;
+}
+
+.popover-region-toggle:hover {
+    color: var(--jctSecondary);
+}
+
+.icon.fa-bell-o {
+    font-size: 20px;
+}
+
+.count-container {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--jctPrimary);
+    color: var(--jctBackground);
+    border-radius: 50%;
+    padding: 2px 5px;
+    font-size: 12px;
+    min-width: 18px;
+    text-align: center;
+}
+
+.popover-region-container {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 300px;
+    background-color: var(--jctAccent);
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.popover-region.collapsed .popover-region-container {
+    display: none;
+}
+
+.popover-region:not(.collapsed) .popover-region-container {
+    display: block;
+}
+
+.popover-region-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 15px;
+    background-color: var(--jctPrimary);
+    color: var(--jctBackground);
+}
+
+.popover-region-header-text {
+    margin: 0;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.popover-region-header-actions a {
+    color: var(--jctBackground);
+    margin-left: 10px;
+    text-decoration: none;
+}
+
+.popover-region-content-container {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.popover-region-content {
+    padding: 10px 15px;
+}
+
+.empty-message {
+    text-align: center;
+    color: var(--jctText);
+    padding: 20px 0;
+}
+
+.popover-region-footer-container {
+    padding: 10px 15px;
+    background-color: var(--jctBackground);
+    text-align: center;
+}
+
+.popover-region-seeall-text {
+    color: var(--jctPrimary);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.popover-region-seeall-text:hover {
+    color: var(--jctSecondary);
+}
+
+/* Loading icon styles */
+.loading-icon {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    color: var(--jctPrimary);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .popover-region-container {
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        border-radius: 0;
+    }
+
+    .popover-region-header-container,
+    .popover-region-content,
+    .popover-region-footer-container {
+        padding: 10px;
+    }
+
+    .popover-region-header-text {
+        font-size: 16px;
+    }
+}

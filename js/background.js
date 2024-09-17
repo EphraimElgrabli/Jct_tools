@@ -30,6 +30,7 @@
  * Check too:
  *    backgroundEvent
  **********************************************************************/
+
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
       if (details.url.includes('/theme/styles.php')) {
@@ -508,6 +509,7 @@ function getLoginToken(){
         });
     });
 }
+
 
 
 /*****************************************************************

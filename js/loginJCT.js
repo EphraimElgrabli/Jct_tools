@@ -177,6 +177,28 @@ function removeCourseDescription() {
     });
 }
 
+function replaceNavLinksWithIcons() {
+    const iconMap = {
+        'ראשי': 'fa-home',
+        'עדכונים בקורסים שלי': 'fa-bell',
+        'הקורסים שלי': 'fa-book',
+        'המדריך': 'fa-question-circle',
+        'אתרי המרכז האקדמי': 'fa-university',
+        'קישורים שימושיים': 'fa-link',
+        'דיווח תקלות': 'fa-exclamation-triangle',
+        'אפשרויות נוספות': 'fa-chevron-down'
+    };
+
+    $('.nav-link').each(function() {
+        const linkText = $(this).text().trim();
+        if (iconMap[linkText]) {
+            $(this).html(`<i class="fa ${iconMap[linkText]}" aria-hidden="true"></i>`);
+            $(this).attr('title', linkText); // Add tooltip
+            $(this).addClass('icon-only'); // Add class for potential CSS styling
+        }
+    });
+}
+
 function replaceLogo() {
     const logoImg = document.querySelector('img.logo[alt="לב"]');
     if (logoImg) {
@@ -735,6 +757,9 @@ function moodle(pass, data) {
 
     replaceLogo();
     console.log("JCT Tools-> Replacing the logo with a modern one");
+
+    replaceNavLinksWithIcons();
+    console.log("JCT Tools-> Replacing the navbar titles to icons");
 
     if (undefined == data)
         data = {};
