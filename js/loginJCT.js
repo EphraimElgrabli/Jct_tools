@@ -139,6 +139,9 @@ function removeCourseDescription() {
         $('widget-visible').remove();
         $('.ByrdhouseOverlay').remove();
         $('.toast-wrapper.mx-auto.py-0.fixed-top').remove();
+        $('button.navbar-toggler.aabtn.d-block.d-md-none.px-1.my-1.border-0[data-toggler="drawers"][data-action="toggle"][data-target="theme_boost-drawers-primary"]').remove();
+        $('div:has(> a.sr-only.sr-only-focusable[href="#maincontent"])').remove();
+        $('.navbar-nav.d-none.d-md-flex.my-1.px-1').remove();
 
         // Function to remove the span
         function removeUserNotifications() {
