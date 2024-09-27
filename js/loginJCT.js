@@ -124,7 +124,101 @@ function mazakConnect(data) {
  * Ui Changes for the new moodle.
  */
 //-----------------------------------------------------
+function extractCourseInfo() {
+    let courses = [];
+    
+    $('.coursevisible').each(function() {
+      let fullName = $(this).find('.course-title h4').text().trim();
+      let nameParts = fullName.split(' - ');
+      
+      let course = {
+        name: nameParts.length > 1 ? nameParts[1] : fullName, // Use the part after the dash, or full name if no dash
+        link: $(this).find('a').attr('href'),
+        category: $(this).find('.coursecat a').text().trim(),
+        imageUrl: $(this).find('.course-image-view').css('background-image').replace(/^url\(['"](.+)['"]\)/, '$1'),
+        teachers: []
+      };
+      
+      $(this).find('.teacherscourseview li').each(function() {
+        course.teachers.push($(this).text().replace('מרצים:', '').trim());
+      });
+      
+      courses.push(course);
+    });
+    
+    return courses;
+  }
+
+  function injectCategory(courseInfo) {
+    // Function to sanitize category names for use in values and data attributes
+    function sanitizeCategory(category) {
+      return category.replace(/"/g, '');
+    }
+  
+    // Get unique categories
+    let categories = [...new Set(courseInfo.map(course => course.category))];
+    
+    // Create the main container
+    let mainContainer = $('<div id="category-courses-container"></div>');
+    
+    // Create radio buttons for categories
+    let radioContainer = $('<div id="category-radio-container"></div>');
+    categories.forEach((category, index) => {
+      let sanitizedCategory = sanitizeCategory(category);
+      let radio = $(`<input type="radio" id="category-${index}" name="category" value="${sanitizedCategory}">`);
+      let label = $(`<label for="category-${index}">${category}</label>`);
+      radioContainer.append(radio).append(label);
+    });
+    mainContainer.append(radioContainer);
+    
+    // Create container for courses
+    let coursesContainer = $('<div id="category-courses-list"></div>');
+    categories.forEach(category => {
+      let sanitizedCategory = sanitizeCategory(category);
+      let categoryCoursesContainer = $(`<div class="category-courses" data-category="${sanitizedCategory}"></div>`);
+      
+      courseInfo.filter(course => course.category === category).forEach(course => {
+        let courseElement = $(`
+          <a href="${course.link}" class="course-item">
+            <div class="course-image">
+              <img src="${course.imageUrl}" alt="${course.name}">
+            </div>
+            <div class="course-info">
+              <h3>${course.name}</h3>
+              <p>Teachers: ${course.teachers.join(', ')}</p>
+            </div>
+          </a>
+        `);
+        categoryCoursesContainer.append(courseElement);
+      });
+      
+      coursesContainer.append(categoryCoursesContainer);
+    });
+    mainContainer.append(coursesContainer);
+    
+    // Inject the container into the page
+    $('body').prepend(mainContainer);
+    
+    // Add event listener for radio buttons
+    $('input[type=radio][name=category]').change(function() {
+      $('.category-courses').hide();
+      $(`.category-courses[data-category="${this.value}"]`).show();
+    });
+    
+    // Show the first category by default
+    $('input[type=radio][name=category]:first').prop('checked', true).trigger('change');
+  }
+  
 function removeCourseDescription() {
+    if (window.location.href === "https://moodle.jct.ac.il/") {
+        // Extract course info before removing elements
+        let courseInfo = extractCourseInfo();
+        console.log("Extracted course info:", courseInfo);
+        
+        // Store course info in local storage for later use
+        localStorage.setItem('extractedCourseInfo', JSON.stringify(courseInfo));
+        injectCategory(courseInfo);
+      }
     $(document).ready(function() {
         // Your existing removals
         $('div[data-for="sectioninfo"]').remove();
@@ -763,6 +857,9 @@ function moodle(pass, data) {
 
     replaceNavLinksWithIcons();
     console.log("JCT Tools-> Replacing the navbar titles to icons");
+
+    let courseInfo = JSON.parse(localStorage.getItem('extractedCourseInfo'));
+    console.log(courseInfo);
 
     if (undefined == data)
         data = {};

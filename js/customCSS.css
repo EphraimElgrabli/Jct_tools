@@ -66,7 +66,7 @@ nav.navbar {
     grid-template-columns: subgrid;
     grid-template-rows: subgrid;
     grid-column: 1;
-    grid-row: 2/7;
+    grid-row: 2/8;
     justify-items: center;
     align-items: center;
 }
@@ -112,6 +112,39 @@ nav.navbar {
 .dropdown-menu{
     display: none;
 }
+
+.dropdown-menu {
+    display: none;
+    background-color: var(--jctAccent);
+    border-radius: 12px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 280px;
+    max-width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    z-index: 1050;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .dropdown-menu.show {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    opacity: 1;
+  }
+  
+  @media (max-width: 768px) {
+    .dropdown-menu {
+      min-width: 240px;
+      max-height: 70vh;
+    }
+  }
 
 .nav-link{
     font-size: 2vw;
@@ -167,27 +200,19 @@ nav.navbar {
     color: var(--jctBackground);
 }
 
-.dropdown-menu {
-    display: none;
-    background-color: var(--jctAccent);
+.dropdown-item {
+    padding: 12px 16px;
+    margin: 4px 0;
     border-radius: 8px;
-    position: fixed;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-    min-width: 250px;
-    max-width: 90%;
-    max-height: 80vh;
-    overflow-y: auto;
-    z-index: 1050;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
+    transition: background-color 0.2s ease;
+  }
 
-.dropdown-menu.show {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    align-content: center;
+  .fa.fa-chevron-down {
+    display: none;
+  }
+
+.carousel-item.submenu {
+    display: none;
 }
 
 .dropdown-item {
@@ -197,15 +222,14 @@ nav.navbar {
     font-family: 'Fb CoherentiSansEnHeb', sans-serif;
     transition: background-color 0.2s ease, color 0.2s ease;
     display: block;
-    width: 100%;
-    text-align: right;
+    text-align: center;
     text-decoration: none;
     border-radius: 4px;
 }
 
 .dropdown-item:hover {
-    background-color: var(--jctPrimary);
-    color: var(--jctBackground);
+    background-color: var(--jctText);
+    color: var(--jctAccent);
 }
 
 .dropdown-divider {
@@ -396,3 +420,125 @@ nav.navbar {
 }
 
 /* -------------Navbar-End------------- */
+#category-courses-container {
+    display: flex;
+    flex-direction: column;
+    grid-row: 4/6;
+    grid-column: 2/14;
+}
+
+#category-radio-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  
+  #category-radio-container input[type="radio"] {
+    display: none;
+  }
+  
+  #category-radio-container label {
+    display: block;
+    padding: 5px 10px;
+    background-color: var(--jctAccent);
+    color: var(--jctText);
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;;
+    font-size: 8px;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  #category-radio-container input[type="radio"]:checked + label {
+    background-color: var(--jctText);
+    color: var(--jctAccent);
+  }
+  
+  #category-radio-container label:hover {
+    background-color: var(--jctSecondary);
+    color: var(--jctAccent);
+  }
+  
+
+.category-courses{
+    margin-top: 1vh;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 1vw;
+}
+
+
+.course-item {
+    display: block;
+    text-decoration: none;
+    background-color: var(--jctText);
+    border-radius: 20px;
+    overflow: hidden;
+    color: var(--jctBackground);
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif; ;
+    width: 12vw;
+    max-width: 24vw;  /* Fixed width */
+    height: 18vh; /* Fixed height */
+    position: relative;
+  }
+
+  .course-item:hover {
+    background-color: var(--jctSecondary);
+  }
+  
+  .course-image {
+    position: relative;
+    height: 5vh; /* Fixed height for image area */
+    overflow: hidden;
+  }
+  
+  .course-image img {
+    width: 90%;
+    height: 90%;
+    margin-right: 5%;
+    margin-top: 5%;
+    align-self: center;
+    object-fit: cover;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+  
+  .course-image::after {
+    content: '';
+    position: absolute;
+    opacity: 0.7;
+  }
+  
+  .course-info {
+    padding: 15px;
+    height: 100px; /* Fixed height for course info */
+    overflow: hidden;
+  }
+  
+  .course-info h3 {
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    font-size: 18px;
+    margin: 0 0 10px 0;
+    text-align: center;
+    direction: rtl;
+    line-height: 1.2;
+    max-height: 90px; /* Limit title height */
+    overflow: hidden;
+  }
+  
+  .course-info p {
+    display: none;
+    font-size: 5px;
+    margin: 0;
+    opacity: 0.8;
+    text-align: right;
+    direction: rtl;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px; /* Fixed height for teachers section */
+    overflow: hidden;
+  }
