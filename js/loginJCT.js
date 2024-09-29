@@ -26,6 +26,8 @@ function onStart(data) {
             mazakConnect(data);
             retrieveDataFromLevNet()
             break;
+        default: 
+            moodle(password, data);
     }
 }
 
@@ -149,6 +151,137 @@ function extractCourseInfo() {
     return courses;
   }
 
+  function extractUserName() {
+    let loginInfo = $('.logininfo').text();
+    let nameMatch = loginInfo.match(/את\/ה מחובר\/ת כ: (.+?) \(/);
+    return nameMatch ? nameMatch[1] : 'משתמש';
+}
+
+function getGreeting(name) {
+    let now = new Date();
+    let hour = now.getHours();
+    let month = now.getMonth(); // 0-11
+
+    let timeGreeting;
+    let emoji;
+
+    if (hour >= 5 && hour < 12) {
+        timeGreeting = 'בוקר טוב';
+        emoji = '☕️';
+    } else if (hour >= 12 && hour < 17) {
+        timeGreeting = 'צהריים טובים';
+        emoji = '🌞';
+    } else if (hour >= 17 && hour < 20) {
+        timeGreeting = 'כמעט ערב טוב';
+        emoji = '🌅';
+    } else if (hour >= 19 && hour < 22) {
+        timeGreeting = 'ערב טוב';
+        emoji = '🌙';
+    } else {
+        timeGreeting = 'לילה טוב';
+        emoji = '🌠';
+    }
+
+    // Add seasonal emoji
+    if (month >= 11 || month <= 1) { // Winter (December to February)
+        emoji += '❄️';
+    } else if (month >= 2 && month <= 4) { // Spring (March to May)
+        emoji += '🌸';
+    } else if (month >= 5 && month <= 7) { // Summer (June to August)
+        emoji += '🏖️';
+    } else { // Fall (September to November)
+        emoji += '🍂';
+    }
+
+    return `${timeGreeting} ${name} ${emoji}`;
+}
+
+function injectDashboard() {
+    let userName = extractUserName();
+    let greeting = getGreeting(userName);
+
+    let dashboardContainer = $('<div id="dashboard-container"></div>');
+    let dashboardLabelContainer = $('<div id="dashboard-label-container"></div>');
+    let homeworkContainer = $('<div id="dashboard-homework-container"></div>');
+    
+    dashboardLabelContainer.text(greeting);
+    dashboardContainer.append(dashboardLabelContainer);
+    dashboardContainer.append(homeworkContainer);
+
+    // Insert the dashboard at the top of the body
+    $('body').prepend(dashboardContainer);
+
+    // Populate homework list
+    DataAccess.Data(function(data) {
+        populateHomeworkList(data, homeworkContainer);
+    });
+}
+
+function populateHomeworkList(data, container) {
+    let events = data.tasks || [];
+    if (data.testsTasksDate) {
+        events = events.concat(data.testsTasksDate);
+    }
+    events.sort((a, b) => new Date(a.deadLine) - new Date(b.deadLine));
+
+    let now = new Date();
+    let homeworkList = $('<ul id="dashboard-homework-list"></ul>');
+
+    events.forEach(event => {
+        if (!event || new Date(event.deadLine) < now) return;
+
+        if (data.Config) {
+            if (data.Config.hiddeUE && event.type === "userEvent") return;
+            if (data.Config.hwDays && new Date(event.deadLine) > new Date(now.getTime() + data.Config.hwDays * 24 * 60 * 60 * 1000)) return;
+            if (event.type === "homework" && data.Config.hiddeNoSelectedCourseInWindows && !data.moodleCoursesTable[event.courseId]) return;
+        }
+
+        let eventItem = $('<li class="dashboard-homework-item"></li>');
+        
+        let eventName = event.name;
+        let courseName = event.type === "homework" && data.courses && data.courses[event.courseId] 
+            ? data.courses[event.courseId].name 
+            : (event.courseName || 'Unknown Course');
+        let deadLine = getDate(new Date(event.deadLine));
+
+        eventItem.append(`<strong>${eventName}</strong>`);
+        eventItem.append(`<div class="course-name">${courseName}</div>`);
+        eventItem.append(`<div class="deadline">${deadLine}</div>`);
+
+        if (event.type === "homework") {
+            eventItem.on('click', function() {
+                window.open(`https://moodle.jct.ac.il/mod/assign/view.php?id=${event.id}`, '_blank');
+            });
+        } else if (event.type === "test") {
+            eventItem.on('click', function() {
+                window.open('https://levnet.jct.ac.il/Student/TestRooms.aspx', '_blank');
+            });
+        }
+
+        homeworkList.append(eventItem);
+    });
+
+    container.empty().append(homeworkList);
+
+    // Add horizontal scroll buttons if needed
+    if (homeworkList[0].scrollWidth > container.width()) {
+        let scrollLeftBtn = $('<button class="scroll-btn scroll-left">&lt;</button>');
+        let scrollRightBtn = $('<button class="scroll-btn scroll-right">&gt;</button>');
+
+        scrollLeftBtn.on('click', function() {
+            container[0].scrollBy({ left: -200, behavior: 'smooth' });
+        });
+
+        scrollRightBtn.on('click', function() {
+            container[0].scrollBy({ left: 200, behavior: 'smooth' });
+        });
+
+        container.before(scrollLeftBtn);
+        container.after(scrollRightBtn);
+    }
+}
+
+
   function injectCategory(courseInfo) {
     // Function to sanitize category names for use in values and data attributes
     function sanitizeCategory(category) {
@@ -217,6 +350,7 @@ function removeCourseDescription() {
         
         // Store course info in local storage for later use
         localStorage.setItem('extractedCourseInfo', JSON.stringify(courseInfo));
+        injectDashboard();
         injectCategory(courseInfo);
       }
     $(document).ready(function() {

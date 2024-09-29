@@ -542,3 +542,115 @@ nav.navbar {
     height: 80px; /* Fixed height for teachers section */
     overflow: hidden;
   }
+
+/* Update these styles in your existing CSS */
+
+#dashboard-container {
+    display: grid;
+    grid-template-columns: subgrid;
+    grid-template-rows: subgrid;
+    grid-row: 1/4;
+    grid-column: 2/14;
+    background-color: var(--jctAccent);
+    border-radius: 10px;
+    padding: 20px;
+    gap: 20px;
+}
+
+#dashboard-label-container {
+    grid-row: 1;
+    grid-column: 1/-1;
+    color: var(--jctText);
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    direction: rtl;
+    text-align: center;
+    align-self: center;
+}
+
+#dashboard-homework-container {
+    grid-row: 2/4;
+    grid-column: 1/-1;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    padding: 10px 0;
+}
+
+#dashboard-homework-list {
+    display: inline-flex;
+    gap: 15px;
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+}
+
+.dashboard-homework-item {
+    background-color: var(--jctBackground);
+    border-radius: 10px;
+    padding: 15px;
+    width: 15vw;
+    min-width: 15vw;
+    height: 12vh;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+    white-space: normal;
+}
+
+.dashboard-homework-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.dashboard-homework-item strong {
+    display: block;
+    color: var(--jctText);
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    font-size: 16px;
+    margin-bottom: 5px;
+    direction: rtl;
+    text-align: right;
+}
+
+.dashboard-homework-item .course-name {
+    color: var(--jctSecondary);
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    font-size: 14px;
+    margin-bottom: 10px;
+    direction: rtl;
+    text-align: right;
+}
+
+.dashboard-homework-item .deadline {
+    color: var(--jctPrimary);
+    font-family: 'Fb CoherentiSansEnHeb', sans-serif;
+    font-size: 12px;
+    direction: rtl;
+    text-align: center;
+}
+
+/* Add smooth scrolling for modern browsers */
+@media (hover: hover) {
+    #dashboard-homework-container {
+        scroll-behavior: smooth;
+    }
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#dashboard-homework-container::-webkit-scrollbar {
+    display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+#dashboard-homework-container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+}
+
+.scroll-btn {
+    display:none;
+}
