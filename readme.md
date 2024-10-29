@@ -64,18 +64,6 @@ JCT Tools aims to streamline the online academic experience for students at the 
 
 ---
 
-## 🖼 **Screenshots**
-
-<div align="center">
-  <img src="assets/screenshots/dashboard_light_mode.png" alt="Dashboard Light Mode" width="600">
-  <p>Modern Dashboard - Light Mode</p>
-  <br>
-  <img src="assets/screenshots/dashboard_dark_mode.png" alt="Dashboard Dark Mode" width="600">
-  <p>Modern Dashboard - Dark Mode</p>
-</div>
-
----
-
 ## ⚙️ **Usage**
 
 - **Access the Extension Settings**
@@ -183,7 +171,7 @@ If you find this project helpful, please give it a star ⭐ on GitHub!
 ---
 
 <div align="center">
-    <img src="assets/ModernUi/DarkLogo.svg" alt="JCT Tools Logo" width="100">
+    <img src="assets/ModernUi/darkLogo.svg" alt="JCT Tools Logo" width="50">
     <p>Enhancing your academic journey with modern tools.</p>
 </div>
 
