@@ -1,4 +1,4 @@
-<div align="center"><img src="assets/ModernUi/DarkLogo.svg" alt="JCT Tools Logo" width="200"></div>
+<div align="center"><img src="assets/ModernUi/darkLogo.svg" alt="JCT Tools Logo" width="200"></div>
 
 # **JCT Tools - Enhancing Your Academic Experience**
 
