@@ -1,51 +1,64 @@
 {
-
-   "name"          : "כלים לסטודנטים של המרכז האקדמי לב",
-   "short_name"    : "Jct tools",
-   "version"       : "4.5.0",
-   "version_name"  : "4.5.0-Beta",
-   "description"   : "הודעות וחיבור לאתרים של המרכז האקדמי לב - מכון לב",
-   "author"        : "David Aben Athar",
-
-   "icons": {"128": "image/icons/jct128.png","16": "image/icons/jct16.png","48": "image/icons/jct48.png"},
-   "browser_action": { "default_icon": "image/icons/jct128.png", "default_popup": "popup.html" },
-   "web_accessible_resources": ["options.html","background.html", "js/customCSS.css", "image/ModernUi/Logo.svg"],
+   "name": "nouvoJCT",
+   "short_name": "Jct modernizer",
+   "version": "0.5.0",
+   "version_name": "0.5.0-Beta",
+   "description": "גרסה חדשה ומודרנית למודל✌️",
+   "author": "Ephraim Elgrabli, Matan Aminov & David Aben Athar",
+   "icons": {
+      "128": "assets/icons/jct128.png",
+      "48": "assets/icons/jct48.png",
+      "32": "assets/icons/jct32.png",
+      "16": "assets/icons/jct16.png"
+   },
+   "web_accessible_resources": [
+      "options.html",
+      "background.html",
+      "css/customCSS.css",
+      "assets/ModernUi/Logo.svg",
+      "assets/ModernUi/darkLogo.svg"
+   ],
    "options_page": "options.html",
-   "options_ui":
-   {
+   "options_ui": {
       "page": "options.html",
-      "open_in_tab":true
+      "open_in_tab": true
    },
    "permissions": [
       "storage",
-      "alarms", 
-      "notifications", 
+      "alarms",
+      "notifications",
       "*://*.jct.ac.il/*",
       "webRequest",
-      "webRequestBlocking"
-    ],
+      "webRequestBlocking",
+      "tabs",
+   "webNavigation"
+   ],
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "background": {"page": "background.html"},
-   "content_scripts":
-   [
+   "background": {
+      "scripts": [
+         "js/lib/jquery.min.js",
+         "js/lib/crypto.js",
+         "js/dataAccess.js",
+         "js/background.js"
+      ]
+   },
+   "content_scripts": [
       {
-      "js": [ "js/lib/jquery.min.js", "js/hide-courses.js" ,"js/loginJCT.js","js/dataAccess.js","js/lib/notify.min.js","js/lib/ouical.min.js" ],
-      "matches":
-       [
-         "*://*.jct.ac.il/*"
-      ],
+         "js": [
+            "js/lib/jquery.min.js",
+            "js/dataAccess.js",
+            "js/loginJCT.js",
+            "js/lib/notify.min.js",
+            "js/lib/ouical.min.js"
+         ],
+         "matches": [
+            "https://moodle.jct.ac.il/"
+         ],
          "run_at": "document_start"
       }
    ],
-
-   "applications": {
-      "gecko": {
-         "id": "abenatha@jct.ac.il",
-         "strict_min_version": "48.0",
-         "strict_max_version": "*"
-      }
+   "browser_action": {
+      "default_icon": "assets/icons/jct128.png"
    },
-
-	"manifest_version": 2
+   "manifest_version": 2
 }
-

@@ -1,625 +1,86 @@
-﻿<html dir="rtl" lang="he">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Options</title>
-        <script type="text/javascript" src="js/lib/jquery.min.js"></script>
-        <script type="text/javascript" src="js/options.js"></script>
-        <script type="text/javascript" src="js/dataAccess.js"></script>
-        <script type="text/javascript" src="js/lib/bootstrap.min.js"></script>
-        <script type="text/javascript" src="js/lib/notify.min.js"></script>
-        <link
-            rel="stylesheet"
-            type="text/css"
-            href="css/lib/bootstrap.min.css"
-        />
-        <link rel="stylesheet" type="text/css" href="css/option.css" />
-    </head>
-    <body>
-        <div
-            style="
-                height: 30px;
-                background: #f7ecb5;
-                font-size: 18px;
-                color: #1b6d85;
-                text-align: center;
-                overflow: hidden;
-            "
-            id="my-extension-alert"
-        >
-            <p
-                style="float: left; margin-left: 10px; cursor: pointer"
-                id="close-my-extension-alert"
-            >
-                X
+﻿<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>אפשרויות</title>
+    <!-- Include necessary scripts and styles -->
+    <!-- jQuery -->
+    <script src="js/lib/jquery.min.js"></script>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="css/option.css">
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <nav id="menu">
+        <div class="option" data-target="home">
+            <i class="fas fa-home fa-2x"></i>
+            <p class="text">בית</p>
+        </div>
+        <div class="option" data-target="settings">
+            <i class="fas fa-cog fa-2x"></i>
+            <p class="text">הגדרות</p>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div id="contenedor">
+        <!-- Home Section -->
+        <div id="home" class="section">
+            <img id="logo" src="assets/ModernUi/Logo.svg" alt="לב" class="logo">
+            <h2>ברוכים הבאים לכלים לסטודנטים של המרכז האקדמי לב</h2>
+            <p>
+                הרחבה זו פותחה על מנת לשפר את חוויית המשתמש במערכת Moodle של המרכז האקדמי לב.
             </p>
             <p>
-                לידיעתכם! תוסף זה אינו שייך למרכז האקדמי לב בשום צורה. לכל דיווח
-                אנא שלחו אמייל לכתובת abenatha@jct.ac.il
+                גירסה: <span id="version"></span>
             </p>
+            <p>
+                פותח על ידי דוד בן עטר<br>
+                מייל: <a href="mailto:abenatha@jct.ac.il">abenatha@jct.ac.il</a>
+            </p>
+            <details>
+                <summary>קרדיט</summary>
+                <ul>
+                    <li>ליוסף כשר על פיתוח האפשרות להסתיר קורסים במודל.</li>
+                    <li>למתן פחימה על תמיכת התוסף.</li>
+                    <li>לאפרים אלגרבלי על ממשק המשתמש החדש.</li>
+                </ul>
+            </details>
+            <details>
+                <summary>תנאים</summary>
+                <ul>
+                    <li>אין לנתונים המאוחסנים בהרחבה זו הצפנה חזקה, ולכן איננו אחראים על המידע (כגון שם משתמש וסיסמא).</li>
+                    <li>איננו מאחסנים נתונים על השרתים שלנו, רק בזיכרון של כרום בו התקנת התוסף מתבצעת.</li>
+                    <li>להרחבה זו יש גישה אך ורק לאתרים הקשורים למוסד (למשל: moodle.jct.ac.il, 10.1.1.1).</li>
+                    <li>איננו אחראים על תקלה כלשהי בהרחבה זו, אבל זה תמיד אפשרי (ומומלץ) לשלוח מייל ולדווח תקלה.</li>
+                    <li>הרחבה זו היא קוד פתוח הנמצא בכתובת: <a href="https://github.com/desdo09/Jct_tools">https://github.com/desdo09/Jct_tools</a></li>
+                </ul>
+            </details>
         </div>
-        <div id="menu">
-            <a class="option" div-id="account">
-                <img src="image/options_img/student_icon.png" class="image" />
-                <p class="text">חשבון</p>
-            </a>
-            <a class="option" div-id="courses">
-                <img src="image/options_img/book_icon.png" class="image" />
-                <p class="text">קורסים</p>
-            </a>
-            <a class="option" div-id="notifications">
-                <img src="image/options_img/bell_icon.png" class="image" />
-                <p class="text">התראות</p>
-            </a>
-            <a class="option" div-id="advanced">
-                <img src="image/options_img/nut_icon.png" class="image" />
-                <p class="text">הגדרות מתקדמות</p>
-            </a>
-            <a class="option lastoption" div-id="about">
-                <img src="image/options_img/about_icon.png" class="image" />
-                <p class="text">אודות</p>
-            </a>
-        </div>
-        <div id="contenedor">
-            <div id="account">
-                <div id="form">
-                    <h2 style="margin: 0">
-                        פרטי חשבון MOODLE של המרכז האקדמי לב
-                    </h2>
-                    <p
-                        style="
-                            color: #f7ecb5;
-                            margin-top: 10px;
-                            margin-bottom: 0;
-                            font-size: 21px;
-                        "
-                    >
-                        בשל העדכון האחרון של Moodle, אנא ודא שאתם מחוברים למערכת
-                    </p>
-                    <p style="margin-top: 10px; font-size: 21px">
-                        לאחר הכניסה, נדרש ללחוץ על כפתור "עדכן פרטים" כדי למשוך
-                        את נתוני ההתחברות שלך,
-                        <br />
-                        ואם הנתונים נכונים, נדרש ללחוץ על הכפתור "שמור פרטים"
-                    </p>
-                    <div id="accountsInput">
-                        <p class="labelsDown">
-                            <label for="userId" style="width: 250px"
-                                >זיהוי המשתמש:</label
-                            >
-                            <input
-                                type="text"
-                                id="userId"
-                                class="form-control"
-                                readonly
-                            />
-                        </p>
-                        <p class="labelsDown">
-                            <label for="userRealName" style="width: 250px"
-                                >שם :</label
-                            >
-                            <input
-                                type="text"
-                                id="userRealName"
-                                class="form-control"
-                                readonly
-                            />
-                        </p>
-                        <p
-                            class="text-muted"
-                            style="font-size: 14px; margin: 0"
-                        >
-                            * פרטי המשתמש "לא ניתן לערוך ידני" וישמשו על מנת
-                            למנוע מהתוסף לאחזר נתונים ממשתמשים אחרים
-                        </p>
-                        <div>
-                            <button
-                                id="updateUserData"
-                                class="btn btn-warning"
-                                style="width: 200px"
-                            >
-                                עדכון פרטים
-                            </button>
-                            <button
-                                id="setUserData"
-                                class="btn btn-success"
-                                style="width: 200px"
-                            >
-                                שמור פרטים
-                            </button>
-                        </div>
-                    </div>
-                    <div
-                        class="activeWeb"
-                        style="display: none; visibility: hidden"
-                    >
-                        <input type="checkbox" id="mo" />
-                        <span class="checkboxtext">מודל</span>
-                        <!--<input type="checkbox" id="re"/>
-                    <span class="checkboxtext">חיבור מרחוק</span>-->
-                        <input type="checkbox" id="mz" />
-                        <span class="checkboxtext lastcheckboxtext"
-                            >לב נט (מזק)</span
-                        >
-                    </div>
-                </div>
-            </div>
-            <div id="courses" style="display: none">
-                <h2>באזור זה ניתן להציג קורסים מסויימים במודל</h2>
 
-                <button id="Refresh" class="btn btn-default Refresh">
-                    רענן
-                </button>
-                <button id="updateCourses" class="btn btn-default Refresh">
-                    עדכן
-                </button>
-                <div
-                    style="
-                        float: left;
-                        padding: 0 10px;
-                        line-height: 30px;
-                        font-size: 16px;
-                        margin-top: 20px;
-                    "
-                >
-                    <div
-                        style="
-                            background-color: #ffb;
-                            height: 30px;
-                            width: 30px;
-                            float: left;
-                            margin-right: 3px;
-                        "
-                    ></div>
-                    קורס של הסמסטר הנוכחי
-                </div>
-                <!--progress doen't work in IE9- -->
-                <progress
-                    class="Refresh"
-                    value="0"
-                    max="2"
-                    style="display: none"
-                ></progress>
-                <table id="coursesTable">
-                    <tr>
-                        <th style="padding: 0 12px">הצג</th>
-                        <th>שם של הקורס</th>
-                        <th style="padding: 0 12px">הצג</th>
-                        <th>שם של הקורס</th>
-                    </tr>
-                </table>
+        <!-- Settings Section -->
+        <div id="settings" class="section" style="display: none;">
+            <h2>הגדרות</h2>
+            <div class="option-group">
+                <label for="themeChoice">בחר ערכת נושא:</label>
+                <select id="themeChoice">
+                    <option value="light">מצב בהיר</option>
+                    <option value="dark">מצב כהה</option>
+                    <option value="auto">אוטומטי (מבוסס על השעה)</option>
+                </select>
             </div>
-            <div id="notifications" style="display: none">
-                <h2>באזור זה ניתן להגדיר התראות</h2>
-                <div id="HWNotifications" class="inlines">
-                    <span>
-                        <input type="checkbox" id="HWfirstAlarm" />
-                        <span for="HWfirstAlarm" class="checkboxtext"
-                            >להודיע על שיעורי בית?</span
-                        >
-                        <br />
-                        <label for="HWfirstAlarmTime" style="display: none"
-                            >כמה שעות לפני?</label
-                        >
-                        <input
-                            type="number"
-                            name="HWfirstAlarmTime"
-                            id="HWfirstAlarmTime"
-                            min="0.5"
-                            step="0.5"
-                            value="1"
-                            style="display: none"
-                            class="form-control"
-                        /> </span
-                    ><span>
-                        <input
-                            type="checkbox"
-                            id="HWSecondAlarm"
-                            style="display: none"
-                        />
-                        <span
-                            class="checkboxtext"
-                            for="HWSecondAlarm"
-                            style="display: none"
-                            >להודיע פעמיים?</span
-                        >
-                        <br />
-                        <label for="HWSecondAlarmTime" style="display: none"
-                            >כמה שעות לפני?</label
-                        >
-                        <input
-                            type="number"
-                            name="SecondAlarm"
-                            id="HWSecondAlarmTime"
-                            min="0.5"
-                            step="0.5"
-                            value="0.5"
-                            style="display: none"
-                            class="form-control"
-                        />
-                    </span>
-                </div>
-                <div id="UENotifications" class="inlines">
-                    <span>
-                        <input type="checkbox" id="UEfirstAlarm" />
-                        <span class="checkboxtext" for="UEfirstAlarm"
-                            >להודיע על אירועים?</span
-                        >
-                        <br />
-                        <label for="UEfirstAlarmTime" style="display: none"
-                            >כמה שעות לפני?</label
-                        >
-                        <input
-                            type="number"
-                            name="firstAlarmTime"
-                            id="UEfirstAlarmTime"
-                            min="0.5"
-                            step="0.5"
-                            value="1"
-                            style="display: none"
-                            class="form-control"
-                        /> </span
-                    ><span>
-                        <input
-                            type="checkbox"
-                            id="UESecondAlarm"
-                            style="display: none"
-                        />
-                        <span
-                            class="checkboxtext"
-                            for="UESecondAlarm"
-                            disabled="true"
-                            style="display: none"
-                            >להודיע פעמיים?</span
-                        >
-                        <br />
-                        <label for="UESecondAlarmTime" style="display: none"
-                            >כמה שעות לפני?</label
-                        >
-                        <input
-                            type="number"
-                            name="SecondAlarm"
-                            id="UESecondAlarmTime"
-                            min="0.5"
-                            step="0.5"
-                            value="0.5"
-                            style="display: none"
-                            class="form-control"
-                        />
-                    </span>
-                </div>
-                <button class="btn btn-default" id="updateNotifications">
-                    עדכן
-                </button>
-            </div>
-            <div id="advanced" style="display: none">
-                <h2>באזור זה ניתן להגדיר הגדרות מתקדמות</h2>
-                <div id="advanced_content" class="panel">
-                    <span class="buttons">
-                        <button
-                            class="btn btn-default"
-                            data-toggle="collapse"
-                            data-parent="#advanced"
-                            data-target="#general"
-                        >
-                            כללי
-                        </button>
-                        <button
-                            class="btn btn-default"
-                            data-toggle="collapse"
-                            data-parent="#advanced"
-                            data-target="#moodle"
-                        >
-                            מודל
-                        </button>
-                        <button
-                            class="btn btn-default"
-                            data-toggle="collapse"
-                            data-parent="#advanced"
-                            data-target="#levnet"
-                        >
-                            לב נט
-                        </button>
-                        <button
-                            class="btn btn-default"
-                            data-toggle="collapse"
-                            data-parent="#advanced"
-                            data-target="#popup"
-                        >
-                            חלון ההתראות
-                        </button>
-                        <!--<button class="btn btn-default" data-toggle="collapse" data-parent="#advanced" data-target="#colors">צבע</button>-->
-                        <button
-                            class="btn btn-default"
-                            data-toggle="collapse"
-                            data-parent="#advanced"
-                            data-target="#theme"
-                        >
-                            סגנונות
-                        </button>
-                    </span>
-
-                    <div id="general" class="collapse in">
-                        <p>
-                            -------------------------------------כללי-------------------------------------
-                        </p>
-                        <p class="helper" style="display: none">
-                            הראה את שיעורי הבית:
-                        </p>
-                        <input
-                            type="radio"
-                            name="from"
-                            id="portal"
-                            style="display: none"
-                        />
-                        <span class="checkboxtext" style="display: none"
-                            >מהדף הראשי של המודל</span
-                        >
-                        <input
-                            type="radio"
-                            name="from"
-                            id="calendar"
-                            style="display: none"
-                        />
-                        <span class="checkboxtext" style="display: none"
-                            >מתצוגת לוח-שנה</span
-                        >
-
-                        <p class="option inline">
-                            הצג עד
-                            <input
-                                type="number"
-                                min="1"
-                                max="99"
-                                step="1"
-                                value="3"
-                                id="hwDays"
-                                class="form-control"
-                            />
-                            ימים של שיעורי בית ועדכן כל
-                            <input
-                                type="number"
-                                min="1"
-                                max="24"
-                                step="1"
-                                value="5"
-                                id="hwUpdate"
-                                class="form-control"
-                            />
-                            שעות
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="hiddeNofication" />
-                            <span class="checkboxtext"
-                                >הסתר את ההתראה אחרי פרק זמן</span
-                            >
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="todaysHW" />
-                            <span class="checkboxtext">
-                                תזכורת לשיעורי הבית היומיים בהפעלת הדפדפן</span
-                            >
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="hwChanges" />
-                            <span class="checkboxtext"
-                                >הודע על שינויים בהגשות של שיעורי הבית</span
-                            >
-                        </p>
-                        <p></p>
-                    </div>
-                    <div id="moodle" class="collapse">
-                        <p>
-                            -------------------------------------מודל-------------------------------------
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="moodleTopic" />
-                            <span class="checkboxtext"
-                                >הסתר את "נושא האתר" בדף הראשי</span
-                            >
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="hiddeModdelHelp" />
-                            <span class="checkboxtext"
-                                >הסתר את "ניתן להגדיר הקורסים שלי בהגדרות"</span
-                            >
-                        </p>
-                        <!--<p class="option disabled">
-                    <input type="checkbox" id="hiddeNoSelectedCourseInMoodle" disabled/>
-                    <span class="checkboxtext" >הראה רק מטלות מקורסים שלי  </span>
-                </p>-->
-                        <p class="option">
-                            <input type="checkbox" id="showTestDay" />
-                            <span class="checkboxtext">
-                                הראה תאריכי בחינות בקורסים שלי
-                            </span>
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="MoodleHiddeUE" />
-                            <span class="checkboxtext">הסתר אירועים</span>
-                        </p>
-                    </div>
-                    <div id="levnet" class="collapse">
-                        <p>
-                            -------------------------------------לב
-                            נט-------------------------------------
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="showGrades" />
-                            <span class="checkboxtext">
-                                הראה ממוצע בדף הציונים
-                            </span>
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="customGrades" />
-                            <span class="checkboxtext"
-                                >הוסף אפשרויות סינון בטבלת הציונים
-                            </span>
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="customAverage" />
-                            <span class="checkboxtext"
-                                >אפשר שינוי ציונים בתצוגה לצורך חישוב
-                                ממוצע</span
-                            >
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="coursesOrder" />
-                            <span class="checkboxtext">
-                                הצג לוח זמנים בטבלה
-                            </span>
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="coursesAddToCalendar" />
-                            <span class="checkboxtext">
-                                הראה אפשרות להוסיף קורסים ליומן
-                            </span>
-                        </p>
-                    </div>
-                    <div id="popup" class="collapse">
-                        <p>
-                            -------------------------------חלון
-                            ההתראות-------------------------------
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="updateOnPopup" />
-                            <span class="checkboxtext"
-                                >עדכן נתונים מחדש בלחיצה על סמל ההרחבה
-                            </span>
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="showBadge" />
-                            <span class="checkboxtext"
-                                >הצג סכ"ה של שיעורי הבית בסמל</span
-                            >
-                        </p>
-                        <p class="option">
-                            <input
-                                type="checkbox"
-                                id="hiddeNoSelectedCourseInWindows"
-                            />
-                            <span class="checkboxtext"
-                                >הראה רק מטלות מקורסים שלי
-                            </span>
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="hiddeTasksDone" />
-                            <span class="checkboxtext">הסתר מטלות שהושלמו</span>
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="hiddeUE" />
-                            <span class="checkboxtext">הסתר אירועים</span>
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="hiddeSameDay" />
-                            <span class="checkboxtext">
-                                הראה רק מטלה אחת מאותו תאריך</span
-                            >
-                        </p>
-                        <p class="option">
-                            <input type="checkbox" id="limitedHw" />
-                            <span class="checkboxtext">
-                                הראה עד
-                                <input
-                                    type="number"
-                                    min="1"
-                                    max="99"
-                                    step="1"
-                                    id="limitedHwAmount"
-                                    class="form-control"
-                                />
-                                מטלות של אותו קורס
-                            </span>
-                        </p>
-                    </div>
-                    <div id="theme" class="collapse">
-                        <p>
-                            -----------------------------------סגנונות-----------------------------------
-                        </p>
-                        <figure>
-                            <img src="image/newSyle.png" />
-                            <figcaption>
-                                <input type="radio" name="style" id="new" />
-                                סגנון עם שיעורי הבית
-                            </figcaption>
-                        </figure>
-                        <figure>
-                            <img src="image/classicSyle.png" />
-                            <figcaption>
-                                <input type="radio" name="style" id="classic" />
-                                סגנון קלאסי
-                            </figcaption>
-                        </figure>
-                        <br />
-                    </div>
-                    <div id="colors" class="collapse">
-                        <p>
-                            -----------------------------------צבעים-----------------------------------
-                        </p>
-                    </div>
-                    <p>
-                        <button
-                            class="btn btn-default"
-                            id="updateSettings"
-                            data-loading-text="<div class='loader'></div>טוען"
-                        >
-                            עדכן
-                        </button>
-                    </p>
-                </div>
-            </div>
-            <div id="about" style="display: none">
-                <p>
-                    כלים לסטודנטים של המרכז האקדמי לב
-                    <br />
-                    גירסה: <var id="version"></var>
-                </p>
-                <p>
-                    הרחבה זו פותחה על ידי דוד בן עטר
-                    <br />
-                    מייל: abenatha@jct.ac.il
-                </p>
-                <p>
-                    <details>
-                        <summary>קרדיט</summary>
-                        <ul>
-                            <li>
-                                ליוסף כשר על פיתוח האפשרות להסתיר קורסים במודל.
-                            </li>
-                            <li>למתן פחימה על תמיכת התוסף.</li>
-                            <li>לאפרים אלגרבלי על ממשק המשתמש החדש.</li>
-                        </ul>
-                    </details>
-                </p>
-                <p>
-                    <details>
-                        <summary>תנאים</summary>
-                        <ul>
-                            <li>
-                                אין לנתונים המאוחסנים בהרחבה זו הצפנה חזקה, ולכן
-                                איננו אחראים על המידע (כגון שם משתמש וסיסמא).
-                            </li>
-                            <li>
-                                איננו מאחסנים נתונים על השרתים שלנו, רק בזיכרון
-                                של כרום בו התקנת התוסף מתבצעת.
-                            </li>
-                            <li>
-                                להרחבה זו יש גישה אך ורק לאתרים הקשורים למוסד
-                                (למשל: moodle.jct.ac.il, 10.1.1.1).
-                            </li>
-                            <li>
-                                איננו אחראים על תקלה כלשהי בהרחבה זו, אבל זה
-                                תמיד אפשרי (ומומלץ) לשלוח מייל ולדווח תקלה.
-                            </li>
-                            <li>
-                                הרחבה זו היא קוד פתוח הנמצא בכתובת:
-                                <a href="https://github.com/desdo09/Jct_tools"
-                                    >https://github.com/desdo09/Jct_tools</a
-                                >
-                            </li>
-                        </ul>
-                    </details>
-                </p>
+            <div class="buttons">
+                <button id="saveSettings" class="btn">שמור הגדרות</button>
             </div>
         </div>
-    </body>
+    </div>
+
+    <!-- Include your JavaScript -->
+    <script src="js/options.js"></script>
+</body>
 </html>
+
+
+

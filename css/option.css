@@ -1,312 +1,231 @@
+/* Variables from your original CSS */
 :root {
-    --bg-primary: #1a1a1a;
-    --bg-secondary: #2c2c2c;
-    --text-primary: #e0e0e0;
-    --text-secondary: #b0b0b0;
-    --accent-color: #4a90e2;
-    --hover-color: #3a7bc8;
-    --border-radius: 8px;
-    --transition: all 0.3s ease;
+    --jctAccent: #E1E7EF;
+    --jctSecondary: #7A4A6D;
+    --jctPrimary: #388FD3;
+    --jctBackground: #F8F6F7;
+    --jctText: #1F2D52;
+    --fontFamily: 'Fb CoherentiSansEnHeb', sans-serif;
 }
 
+:root.dark-mode {
+    --jctAccent: #2E2E2E;
+    --jctSecondary: #A26AA1;
+    --jctPrimary: #5DA0D6;
+    --jctBackground: #1A1A1A;
+    --jctText: #E1E1E1;
+}
+
+/* Reset and body styles */
 body {
-    background: var(--bg-primary);
-    margin: 0 auto;
-    width: 100%;
-    max-width: 1200px;
-    min-height: 100vh;
-    font-family: "Segoe UI", Tahoma, sans-serif;
-    color: var(--text-primary);
-    font-size: 16px;
-    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    font-family: var(--fontFamily);
+    background-color: var(--jctBackground);
+    color: var(--jctText);
+    display: grid;
+    grid-template-columns: repeat(13, 1fr);
+    grid-template-rows: repeat(8, minmax(0, 1fr));
+    grid-gap: 2vh 1vw;
+    height: 100vh;
+    box-sizing: border-box;
+}
+
+/* Sidebar Navigation */
+nav {
+    grid-column: 1 / 3;
+    grid-row: 1 / -1;
+    background-color: var(--jctAccent);
+    display: grid;
+    grid-template-rows: repeat(5, auto);
+    padding-top: 5vh;
+    align-items: start;
+}
+
+nav .option {
+    text-align: center;
+    margin-bottom: 2vh;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+nav .option:hover {
+    background-color: var(--jctSecondary);
+}
+
+nav .option img {
+    width: 3vw;
+    height: auto;
+}
+
+nav .option .text {
+    font-size: 1.2vw;
+    color: var(--jctText);
+}
+.logo
+{
+    max-width: 10vw;
+    max-height: 10vw;
+    align-content: center;
+
+}
+/* Main Content Area */
+#contenedor {
+    grid-column: 3 / -1;
+    grid-row: 1 / -1;
+    background-color: var(--jctAccent);
+    border-radius: 10px;
+    padding: 2vw;
+    overflow-y: auto;
 }
 
 #contenedor h2 {
-    font-size: 24px;
-    margin: 0 0 30px 0;
-}
-
-input[type="checkbox"],
-input[type="radio"] {
-    transform: scale(1.5);
-    margin: 0 10px;
-}
-
-span {
-    display: block;
-    margin: 15px auto;
+    font-size: 2vw;
+    margin-bottom: 2vh;
     text-align: center;
 }
 
-a {
-    text-decoration: none;
-    color: var(--accent-color);
-    transition: var(--transition);
-}
-
-a:hover {
-    color: var(--hover-color);
-}
-
-figure {
-    display: inline-block;
-}
-
-/* Global classes */
-.hidden {
-    display: none;
-}
-
-.checkboxtext {
-    margin: 0 5px 0 20px;
-    font-size: 110%;
-    display: inline;
+#contenedor p {
+    font-size: 1.2vw;
     line-height: 1.5;
+    margin-bottom: 1vh;
+    direction: rtl;
 }
 
-.lastcheckboxtext {
-    margin: 0 5px 0 0;
-}
-
-.labelsDown {
-    margin: 0 0 10px 0;
-}
-
-.inlines {
-    display: inline-block;
+#contenedor input,
+#contenedor select,
+#contenedor textarea {
     width: 100%;
-    max-width: 450px;
+    padding: 0.5vw;
+    margin-bottom: 1vh;
+    font-size: 1vw;
+    border: 1px solid var(--jctSecondary);
+    border-radius: 5px;
+    background-color: var(--jctBackground);
+    color: var(--jctText);
+    box-sizing: border-box;
 }
 
-/* Menu styles */
-#menu {
-    background: var(--bg-secondary);
-    padding: 20px 0;
-    text-align: center;
-    margin-top: 20px;
-    border-radius: var(--border-radius) var(--border-radius) 0 0;
-}
-
-#menu a {
-    margin: 0 20px;
-    display: inline-block;
-    padding: 10px;
-    text-decoration: none;
-    transition: var(--transition);
-}
-
-#menu .option:hover {
-    background: var(--hover-color);
-}
-
-#menu .option img {
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    margin: 0 0 5px 0;
-}
-
-#menu .option .text {
-    margin: 0;
-    font-size: 14px;
-}
-
-/* Container styles */
-#contenedor {
-    padding: 30px;
-    width: 100%;
-    text-align: center;
-    margin: 0 auto;
-    background: var(--bg-secondary);
-    border-radius: 0 0 var(--border-radius) var(--border-radius);
-}
-
-#contenedor div {
-    padding: 15px;
-}
-
-/* Account styles */
-#account input {
-    height: 40px;
-    width: 250px;
-    margin-bottom: 15px;
-    font-size: 16px;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    border: 1px solid var(--accent-color);
-    border-radius: var(--border-radius);
-    padding: 0 10px;
-}
-
-#account label {
-    display: inline-block;
-    width: 200px;
-    padding: 5px;
-}
-
-#account .activeWeb {
-    margin: 30px 0;
-}
-
-#account button {
-    margin: 0 10px;
-    font-size: 16px;
-    padding: 10px 20px;
-    background-color: var(--accent-color);
-    color: var(--text-primary);
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-#account button:hover {
-    background-color: var(--hover-color);
-}
-
-#account .buttons {
-    text-align: right;
-}
-
-/* Courses styles */
-#courses table {
-    width: 100%;
-    margin: 0 auto;
-    border: 1px solid var(--accent-color);
-    background: var(--bg-primary);
-    color: var(--text-primary);
-    text-align: center;
-    border-collapse: collapse;
-    font-size: 16px;
-}
-
-#courses table th,
-td {
-    padding: 10px;
-    border: 1px solid var(--accent-color);
-}
-
-#courses .refresh {
-    float: right;
-    font-size: 14px;
-    margin-right: 10px;
-}
-
-#courses .btn {
-    float: right;
-}
-
-/* Notifications styles */
-#notifications input[type="number"] {
-    height: 30px;
-    width: 80px;
-    font-size: 16px;
-    background-color: var(--bg-primary);
-    color: var(--text-primary);
-    border: 1px solid var(--accent-color);
-    border-radius: var(--border-radius);
-    padding: 0 10px;
-}
-
-#notifications button {
-    font-size: 16px;
-    padding: 10px 20px;
-    background-color: var(--accent-color);
-    color: var(--text-primary);
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-#notifications button:hover {
-    background-color: var(--hover-color);
-}
-
-/* Advanced styles */
-#advanced .helper {
-    text-align: right;
-    margin: 0 30px 10px 0;
-}
-
-#advanced .option {
-    text-align: right;
-    margin: 20px 30px 10px 0;
-}
-
-#advanced .option.disabled {
-    color: var(--text-secondary);
-}
-
-#advanced figure img {
-    width: 250px;
-    height: auto;
-    border: 1px solid var(--accent-color);
-    border-radius: var(--border-radius);
-}
-
-#advanced button {
-    font-size: 16px;
-    padding: 10px 20px;
-    background-color: var(--accent-color);
-    color: var(--text-primary);
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-#advanced button:hover {
-    background-color: var(--hover-color);
-}
-
-#about {
-    text-align: right;
-}
-
-#about .log {
-    margin: 25px 30px 0 0;
-}
-
-#advanced .buttons {
+#contenedor label {
     display: block;
+    margin-bottom: 0.5vh;
+    font-size: 1.2vw;
+    font-weight: bold;
+}
+
+#contenedor button {
+    padding: 0.8vw 1.5vw;
+    font-size: 1.2vw;
+    background-color: var(--jctPrimary);
+    color: var(--jctAccent);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#contenedor button:hover {
+    background-color: var(--jctSecondary);
+}
+
+#contenedor .section {
+    margin-bottom: 4vh;
+}
+
+#contenedor .option-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 1vh;
+}
+
+#contenedor .option-group input[type="checkbox"],
+#contenedor .option-group input[type="radio"] {
+    margin-left: 0.5vw;
+}
+
+#contenedor .option-group label {
+    margin: 0;
+    font-size: 1.2vw;
+}
+
+#contenedor .buttons {
+    text-align: center;
+}
+
+/* Table Styles */
+#contenedor table {
     width: 100%;
-    clear: both;
-    overflow: hidden;
+    border-collapse: collapse;
+    margin-bottom: 2vh;
+}
+
+#contenedor table th,
+#contenedor table td {
+    border: 1px solid var(--jctSecondary);
+    padding: 0.8vw;
     text-align: center;
+    font-size: 1vw;
 }
 
-/* Override Bootstrap */
-.panel {
-    background-color: transparent;
+#contenedor table th {
+    background-color: var(--jctPrimary);
+    color: var(--jctAccent);
 }
 
-#passiveMode {
-    text-align: right;
-    margin-right: 30px;
-}
-
-th {
-    text-align: center;
-}
-
-/* Loader */
-.loader {
-    border: 3px solid var(--bg-primary);
-    border-top: 3px solid var(--accent-color);
-    border-radius: 50%;
-    width: 25px;
-    height: 25px;
-    animation: spin 1s linear infinite;
-    float: right;
-    margin-left: 10px;
-}
-
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    body {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        height: auto;
     }
-    100% {
-        transform: rotate(360deg);
+
+    nav {
+        grid-column: 1 / -1;
+        grid-row: 1;
+        grid-template-columns: repeat(5, 1fr);
+        grid-template-rows: auto;
+        padding-top: 1vh;
+    }
+
+    nav .option {
+        margin-bottom: 0;
+    }
+
+    nav .option img {
+        width: 6vw;
+    }
+
+    nav .option .text {
+        font-size: 2vw;
+    }
+
+    #contenedor {
+        grid-column: 1 / -1;
+        grid-row: 2;
+        padding: 4vw;
+    }
+
+    #contenedor h2 {
+        font-size: 4vw;
+    }
+
+    #contenedor p,
+    #contenedor label,
+    #contenedor input,
+    #contenedor select,
+    #contenedor textarea,
+    #contenedor button {
+        font-size: 2vw;
+    }
+
+    #contenedor button {
+        padding: 1.5vw 3vw;
+    }
+
+    #contenedor table th,
+    #contenedor table td {
+        font-size: 1.8vw;
+        padding: 1.5vw;
     }
 }

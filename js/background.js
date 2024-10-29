@@ -1,47 +1,88 @@
-/*****************************************************************
- *                           Created By
- *                        David Aben Athar
- *
- * Last update: 21/10/2018               email: abenatha@jct.ac.il
- ******************************************************************/
-/*****************************************************************
- * FUNCTION
- *    chrome.runtime.onMessage.addListener
- *
- * RETURN VALUE
- *        This function will execute the function "onBackgroundEvent" in
- *     all view active
- *
- * PARAMETERS
- *   request - an object with contain:
- *             + updatedata  = (true/false/null)
- *             + changeIcon  = (true/false/null)
- *
- *   This function will get the request maded by anothers
- *  pages in the extension and execute backgroundEvent function
- *   In case the object received contain true in login
- *  then the function will login in moodle.jct.ac.il with
- *  the username and password into the object
- *   In case the object received contain true in updatedata
- *  then the function will update the course and task list
- *   In case the object received contain changeIcon
- *  the function will change the extension icon
- *
- * Check too:
- *    backgroundEvent
- **********************************************************************/
+// Background script (e.g., background.js)
 
+// Object to keep track of tab URLs
+const tabUrls = {};
+
+// Function to update tab URLs
+function updateTabUrl(tabId, url) {
+  tabUrls[tabId] = url;
+}
+
+// Listen for tab navigations to update tab URLs
+chrome.webNavigation.onCommitted.addListener((details) => {
+  if (details.frameId === 0) {
+    updateTabUrl(details.tabId, details.url);
+  }
+});
+
+// Listen for history state updates
+chrome.webNavigation.onHistoryStateUpdated.addListener((details) => {
+  if (details.frameId === 0) {
+    updateTabUrl(details.tabId, details.url);
+  }
+});
+
+// Listen for tab updates
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if (changeInfo.url) {
+    updateTabUrl(tabId, changeInfo.url);
+  }
+});
+
+// Clean up when a tab is closed
+chrome.tabs.onRemoved.addListener((tabId) => {
+  delete tabUrls[tabId];
+});
+
+// Normalize URLs for comparison
+function normalizeUrl(url) {
+  try {
+    const parsedUrl = new URL(url);
+    return `${parsedUrl.origin}${parsedUrl.pathname}`.replace(/\/$/, '');
+  } catch (e) {
+    return url;
+  }
+}
+
+// Modify the request only if it's from the main page
 chrome.webRequest.onBeforeRequest.addListener(
-    function(details) {
-      if (details.url.includes('/theme/styles.php')) {
-        return {redirectUrl: chrome.runtime.getURL('/js/customCSS.css')};
+  function(details) {
+    if (details.url.includes('/theme/styles.php')) {
+      const tabUrl = tabUrls[details.tabId] || '';
+      const normalizedTabUrl = normalizeUrl(tabUrl);
+      if (normalizedTabUrl === 'https://moodle.jct.ac.il' || normalizedTabUrl === 'http://moodle.jct.ac.il') {
+        return {redirectUrl: chrome.runtime.getURL('/css/customCSS.css')};
       }
-    },
-    {urls: ["*://*.jct.ac.il/*"]},
-    ["blocking"]
-  );
-  
-  console.log("JCTTools -> CSS redirection listener added");
+    }
+  },
+  {urls: ["*://moodle.jct.ac.il/*"]},
+  ["blocking"]
+);
+
+// Prevent the CSS from being cached
+chrome.webRequest.onHeadersReceived.addListener(
+  function(details) {
+    const headers = details.responseHeaders || [];
+    const newHeaders = headers.filter(header => {
+      const name = header.name.toLowerCase();
+      return name !== 'cache-control' && name !== 'pragma' && name !== 'expires';
+    });
+    // Set Cache-Control headers to prevent caching
+    newHeaders.push({name: 'Cache-Control', value: 'no-store, no-cache, must-revalidate, proxy-revalidate'});
+    newHeaders.push({name: 'Pragma', value: 'no-cache'});
+    newHeaders.push({name: 'Expires', value: '0'});
+    return {responseHeaders: newHeaders};
+  },
+  {urls: ["*://moodle.jct.ac.il/theme/styles.php*"]},
+  ["blocking", "responseHeaders"]
+);
+
+console.log("JCTTools -> CSS redirection listener updated");
+
+
+  chrome.browserAction.onClicked.addListener(() => {
+    chrome.runtime.openOptionsPage();
+});
 
 chrome.runtime.onMessage.addListener(messageListener);
 function messageListener(request, sender, sendResponse) {
@@ -86,25 +127,28 @@ function messageListener(request, sender, sendResponse) {
     }
 }
 
+chrome.webRequest.onBeforeSendHeaders.addListener(
+    function(details) {
+      // Modify headers
+      let headers = details.requestHeaders;
+  
+      // Set the Origin header
+      headers.push({ name: "Origin", value: "https://levnet.jct.ac.il" });
+  
+      // Set the Referer header
+      headers.push({ name: "Referer", value: "https://levnet.jct.ac.il/Login/Login.aspx" });
+  
+      // Set the User-Agent header (optional, use with caution)
+      // headers.push({ name: "User-Agent", value: "Your User Agent String" });
+  
+      return { requestHeaders: headers };
+    },
+    { urls: ["*://levnet.jct.ac.il/*"] },
+    ["blocking", "requestHeaders", "extraHeaders"]
+  );
+  
 
-/*****************************************************************
- * FUNCTION
- *    backgroundEvent
- *
- *
- * PARAMETERS
- *   eventType - an object with contain:
- *                            +    type = the event type
- *             + operationCompleted  = (true/false)
- *             + error  = string with the error
- *
- * MEANING
- *        When the background page run an operation (like update data)
- *  the function will check in all active views (page of the extension)
- *  if the function "onBackgroundEvent" exist and then run it (sending
- *  the eventType)
- *
- **********************************************************************/
+
 function backgroundEvent(eventType) {
     // Look through all the pages in this extension to find one we can use.
     var views = chrome.extension.getViews();
@@ -118,14 +162,7 @@ function backgroundEvent(eventType) {
     }
 }
 
-/*****************************************************************
- * FUNCTION
- *    chrome.runtime.onInstalled
- *
- * MEANING
- *    When the extension install the function will run and set the default
- * settings
- **********************************************************************/
+
 chrome.runtime.onInstalled.addListener(onInstalled);
 function onInstalled(reason) {
     reason = reason["reason"];
@@ -214,9 +251,6 @@ function onStart(data) {
 
     chrome.alarms.clearAll();
     chrome.browserAction.setBadgeBackgroundColor({color: "#043D4E"});
-    //Because firefox onInstalled doesn't work,
-    //we check if the data.Config is defined,
-    // in case are not the run onInstalled
     if (data.Config == null) {
         onInstalled("install");
         data.Config = {}
@@ -396,7 +430,6 @@ function createEventNotification(eventId, change) {
             event = eventId;
         }
 
-        //To prevent bug
         if (event == null)
             return;
 
@@ -437,26 +470,8 @@ function createEventNotification(eventId, change) {
     });
 }
 
-/*****************************************************************
- * FUNCTION
- *   login
- *
- * RETURN VALUE
- *   This function use the object ajaxAns to return the data
- *
- * PARAMETERS
- *   username  - The username to login
- *   password  - The password to login
- *   asyncType - True in case we want to use async
- *
- * MEANING
- *    This function will try to login to the moodle page by send it a
- *   post that contains the username and password (received)
- *
- **********************************************************************/
+
 function login(username, password, anonymous) {
-
-
     const promise = new Promise(function (resolve, reject) {
         getLoginToken().then(function (logintoken){
             if(logintoken == null){
@@ -492,11 +507,6 @@ function login(username, password, anonymous) {
             reject();
         }
     });
-
-
-
-
-
     return promise;
 }
 
@@ -512,21 +522,6 @@ function getLoginToken(){
 
 
 
-/*****************************************************************
- * FUNCTION
- *   updateData
- *
- * RETURN VALUE
- *   This function use the object ajaxAns to return the data
- *
- * PARAMETERS
- *   asyncType - True in case we want to use async
- *
- * MEANING
- *    This function will update the courses and homework list in the
- *   database
- *
- **********************************************************************/
 function updateData(asyncType) {
     console.log("Updating data");
     asyncType = asyncType || true;
@@ -602,25 +597,7 @@ function updateData(asyncType) {
 
 }
 
-/*****************************************************************
- * FUNCTION
- *   getAllCourses
- *
- * RETURN VALUE
- *    Return an object that contains the courses data (data) and the
- *  hash table order(index)
- *
- * PARAMETERS
- *   html - An html document
- *
- * MEANING
- *   This function will take the couse div in the moodle, then insert
- *   evey course in an object (with name, id, MoodleId)
- *
- *  ATTENTION
- *   This function help the updateData function
- *
- **********************************************************************/
+
 function getAllCourses(html) {
     var data = {};
     var index = [];
@@ -658,14 +635,7 @@ function getAllCourses(html) {
     });
     return {data: data, index: index};
 }
-/***************************************
- * Separe data from courses
- * Example 120221.3.5776 - אלגברה לינארית ב
- *
- * The function will search for numbers and
- * save it as id and then take the rest
- * and save as name
- *****************************************/
+
 function separateCoursesData(data, courseDetails) {
     var idNumber = "";
     var character;
@@ -686,63 +656,61 @@ function separateCoursesData(data, courseDetails) {
 
 function getAllHomeWorksFromCalendar() {
     const promise = new Promise(function (resolve, reject) {
-       var request = $.ajax({
-        url: "https://moodle.jct.ac.il/calendar/view.php?view=upcoming",
-        type: 'GET'
-       });
-       request.done(function (html) {
-           var hws = [];
-           $(html).find(".eventlist .event").each(function () {
-               try {
-                   var event = {};
-                   // Getting type by icon img alt attribute
-                   var iconImg = $(this).find(".card-header .d-inline-block.mt-1 img");
-                   if (iconImg.attr("alt") === "ארועי פעילויות") {
-                       event["type"] = "homework";
-                   } else if (iconImg.attr("alt") === "אירוע משתמש") {
-                       event["type"] = "userEvent";
-                   } else {
-                       return; // Skip this event if it's not homework or user event
-                   }
-                   // Getting course id from attribute
-                   event["courseId"] = $(this).attr("data-course-id");
-                   // Getting date (timestamp) from <a>
-                   let dateLink = $(this).find(".description a").first().attr("href");
-                   let timestamp = dateLink.match(/time=(\d+)/)[1];
-                   event["deadLine"] = (new Date(parseInt(timestamp) * 1000)).toString();
-                   // Getting id from the submission link
-                   let submissionLink = $(this).find(".card-footer a.card-link").attr("href");
-                   let idMatch = submissionLink.match(/id=(\d+)/);
-                   event["id"] = idMatch ? idMatch[1] : null;
-                   // Getting name from title
-                   let eventName = $(this).find("h3.name").text().trim();
-                   if (eventName.startsWith("יש להגיש את")) {
-                       eventName = eventName.match(/יש להגיש את [''](.+)['']$/)[1];
-                   }
-                   event["name"] = (eventName.length > 33) ? (eventName.substring(0, 30) + "...") : eventName;
-                   hws.push(event);
-               } catch (e) {
-                   console.error(e);
-               }
-           });
-           resolve(hws);
-       });
-       request.fail(function (data) {
-           console.log("HomeWorksFromCalendar - request failed");
-           console.log(data);
-           reject();
-       });
+        var request = $.ajax({
+            url: "https://moodle.jct.ac.il/calendar/view.php?view=upcoming",
+            type: 'GET'
+        });
+        request.done(function (html) {
+            var hws = [];
+            $(html).find(".eventlist .event").each(function () {
+                try {
+                    var event = {};
+                    // Getting type by icon img alt attribute
+                    var iconImg = $(this).find(".card-header .d-inline-block.mt-1 img");
+                    if (iconImg.attr("alt") === "ארועי פעילויות") {
+                        event["type"] = "homework";
+                    } else if (iconImg.attr("alt") === "אירוע משתמש") {
+                        event["type"] = "userEvent";
+                    } else {
+                        return; // Skip this event if it's not homework or user event
+                    }
+                    // Getting course id from attribute
+                    event["courseId"] = $(this).attr("data-course-id");
+                    // Getting date (timestamp) from <a>
+                    let dateLink = $(this).find(".description a").first().attr("href");
+                    let timestamp = dateLink.match(/time=(\d+)/)[1];
+                    event["deadLine"] = (new Date(parseInt(timestamp) * 1000)).toString();
+                    // Getting id from the submission link
+                    let submissionLink = $(this).find(".card-footer a.card-link").attr("href");
+                    let idMatch = submissionLink.match(/id=(\d+)/);
+                    event["id"] = idMatch ? idMatch[1] : null;
+                    // Getting name from title
+                    let eventName = $(this).find("h3.name").text().trim();
+                    if (eventName.startsWith("יש להגיש את")) {
+                        eventName = eventName.match(/יש להגיש את [''](.+)['']$/)[1];
+                    }
+                    event["name"] = (eventName.length > 33) ? (eventName.substring(0, 30) + "...") : eventName;
+                    // **Getting course name**
+                    var courseName = $(this).find(".description .row").filter(function() {
+                        return $(this).find(".col-1 i").attr("title") === "קורס";
+                    }).find(".col-11 a").text().trim();
+                    event["courseName"] = courseName;
+                    hws.push(event);
+                } catch (e) {
+                    console.error(e);
+                }
+            });
+            resolve(hws);
+        });
+        request.fail(function (data) {
+            console.log("HomeWorksFromCalendar - request failed");
+            console.log(data);
+            reject();
+        });
     });
     return promise;
-   }
+}
 
-/***************************************
- * Separe data from homework div
- *
- *  The function will search for the name
- *  and the date then save it in an object
- *  with the type "userEvent"
- *****************************************/
 function userEventData(usData) {
     var name = (($(usData).find("a"))[0]).text;
     var deadLine = stringToDate($(usData).find(".date").text());
@@ -792,11 +760,6 @@ function separateHomeworkData(hwdata) {
     return {type: "homework", id: homeworkId, name: homeworkName, courseId: courseId, deadLine: homeworkDeadLine}
 }
 
-/********************************************
- * The function get an day in format DD/MM/YY
- * and a time in format HH:MM then return
- * a string with the date
- *************************************************/
 function stringToDate(date) {
 
     var dayArray = new Array();
@@ -948,11 +911,7 @@ function setBadge() {//showBadge
     backgroundEvent({type: "setBadge", operationCompleted: true})
 }
 
-/***********************************
- this function change the extension
- icon when the user active/desactive
- the extension
- ************************************/
+
 function changeIcon(flag) {
     if (flag)
         chrome.browserAction.setIcon({path: "../image/icons/jct128.png"});
@@ -960,61 +919,143 @@ function changeIcon(flag) {
         chrome.browserAction.setIcon({path: "../image/icons/jctDisable.png"});
 }
 
-function LevNetLogin(username, password) {
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+    if (request.action === 'fetchLevNetData') {
+        console.log("Fetching LevNet Data - Step 1: Received request.");
 
-    const promise = new Promise(function (resolve, reject) {
+        // Retrieve username and password from storage
+        chrome.storage.local.get(['username', 'password'], function (data) {
+            const username = data.username;
+            const password = data.password;
 
-        var request = $.ajax({
-            url: "https://levnet.jct.ac.il//api/home/login.ashx?action=TryLogin",
-            type: "POST",
-            data: JSON.stringify({
-                action: 'TryLogin',
-                password: password,
-                username: username
-            }),
-            dataType: "json",
-            contentType: "application/json; charset=utf-8",
-            success: function (response) {
-                console.log("success");
-            },
-            error: function (response) {
-                console.log("failed");
-            }
-        });
-
-        request.done(function (data) {
-            // In case the username/password are wrong the moodle return an error that is requiered to
-            // logout before login a new user
-            if ($("#ctl00_ctl00_ContentPlaceHolder1_ContentPlaceHolder1_lErrorFailed").text().length > 0) {
-
-                console.log("Levnet wrong password");
-                backgroundEvent({
-                    type: "mazakLogin",
-                    operationCompleted: false,
-                    error: "שם המשתמש או הסיסמה שהזנת שגויים"
-                });
-                reject();
+            if (!username || !password) {
+                console.error("Missing credentials.");
+                sendResponse({ success: false, error: 'Missing credentials' });
                 return;
             }
-            chrome.runtime.sendMessage({message: "login status ok"});
 
-            console.log("login status ok");
-            // console.log(data);
-            resolve("");
+            console.log("Step 2: Credentials retrieved. Username:", username);
+
+            // Chain the network requests
+            getInitialCookies()
+                .then(function () {
+                    console.log("Step 3: Initial cookies retrieved.");
+                    return LevNetLogin(username, password);
+                })
+                .then(function (token) {
+                    console.log("Step 4: Login successful. Token:", token);
+                    return fetchWeeklySchedule(token);
+                })
+                .then(function (scheduleData) {
+                    console.log("Step 5: Weekly schedule fetched.");
+                    sendResponse({ success: true, scheduleData: scheduleData });
+                })
+                .catch(function (error) {
+                    console.error("Error in fetching LevNet data:", error);
+                    sendResponse({ success: false, error: error });
+                });
         });
 
-        request.fail(function (xhr, status, error) {
-            chrome.runtime.sendMessage({message: "login status failed, status: " + xhr.status});
-            setBadge();
-            console.log("login status failed, status: " + xhr.status);
-            backgroundEvent({type: "login", operationCompleted: false, error: "אין חיבור למודל"});
-            reject();
+        return true; // Keep the messaging channel open for async sendResponse
+    }
+});
+
+
+function getInitialCookies() {
+    return new Promise(function(resolve, reject) {
+        $.ajax({
+            url: "https://levnet.jct.ac.il/Login/Login.aspx",
+            type: "GET",
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function(data, status, xhr) {
+                console.log("Initial login page fetched");
+                // Cookies should be stored by the browser since withCredentials is true
+                resolve();
+            },
+            error: function(xhr, status, error) {
+                console.error("Failed to get initial cookies:", status, error);
+                reject("Failed to get initial cookies");
+            }
         });
     });
-
-    return promise;
 }
 
+
+function LevNetLogin(username, password) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: "https://levnet.jct.ac.il/api/home/login.ashx?action=TryLogin&nocache=" + Date.now(),
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({
+                username: username,
+                password: password,
+                defaultLanguage: null
+            }),
+            headers: {
+                'Accept': 'application/json, text/plain, */*',
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (response, status, xhr) {
+                const token = xhr.getResponseHeader('X-LevNet-Token');
+                if (!token) {
+                    console.error("Token not found in response headers");
+                    reject("Token not found");
+                    return;
+                }
+                console.log("Token retrieved:", token);
+                resolve(token);
+            },
+            error: function (xhr, status, error) {
+                console.error("Login failed:", status, error);
+                console.error("Response Text:", xhr.responseText);
+                reject("Login failed");
+            }
+        });
+    });
+}
+
+
+function fetchWeeklySchedule(token) {
+    return new Promise(function (resolve, reject) {
+        $.ajax({
+            url: "https://levnet.jct.ac.il/api/student/schedule.ashx?action=LoadWeeklySchedule&nocache=" + Date.now(),
+            type: "POST",
+            dataType: "json",
+            contentType: "application/json;charset=UTF-8",
+            data: JSON.stringify({
+                selectedAcademicYear: 5785,
+                selectedSemester: 2
+            }),
+            headers: {
+                'X-LevNet-Token': token,
+                'Accept': 'application/json, text/plain, */*',
+            },
+            xhrFields: {
+                withCredentials: true
+            },
+            success: function (response) {
+                console.log("fetchWeeklySchedule response:", response);
+                if (response.success) {
+                    resolve(response);
+                } else {
+                    console.error("Failed to fetch schedule: success flag is false", response);
+                    reject("Failed to fetch schedule");
+                }
+            },
+            error: function (xhr, status, error) {
+                console.error("Error fetching schedule:", status, error);
+                console.error("Response Text:", xhr.responseText);
+                reject("Error fetching schedule");
+            }
+        });
+    });
+}
 
 
 function testNotifications(type) {
@@ -1056,7 +1097,6 @@ function testNotifications(type) {
                 });
     }
 }
-
 
 function getUrlParam( name, url ){
     if (!url) url = location.href;
